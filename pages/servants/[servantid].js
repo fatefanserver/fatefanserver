@@ -81,7 +81,7 @@ export const getStaticProps = async({params}) => {
   wikidata =JSON.parse(JSON.stringify(wikidata));
   return {
     props: {wikidata},
-      revalidate: 5
+      revalidate: 1
       }
   
 }
