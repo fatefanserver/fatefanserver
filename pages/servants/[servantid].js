@@ -1,41 +1,51 @@
 import firebase from '../../firebase/clientApp.js'
-const db = firebase.database();
+const db = firebase.firestore();
 import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
-
+import Gallery from '../../components/servant/gallery'
+import Transposable from '../../components/servant/element.js'
+import React from 'react'
 
 const Home = ({wikidata}) => {
-
+  const elements = [];
+  wikidata.hasElements.forEach((i) => {
+    elements.push(
+    <div className={styles.wikiInfo} >
+      <Transposable data={wikidata.elements[i]}/>
+    </div>)
+  })
   return(
     <>
-    <div className={styles.container}>
+    <div className={styles.container} style={{
+        backgroundColor: wikidata.bgColour,
+      }}>
       <Head>
-        <title>Fate/Fanservant Server</title>
+        <title>{wikidata.truename}</title>
         <meta name="description" content="Fate/Fanservant Server" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-        {wikidata['truename']}
-        </h1>
-        <h2 >
-        {wikidata['class']}
-        </h2>
-        <img src={wikidata['icon']} width="200" height="200"></img>
-        <style jsx>
-        {`
-        .main__container{
-        height:100px;
-        width:50%;
-        margin:0 auto;
-        }`
-        }
-        </style>
-        <p className={styles.description}>
-          {wikidata['description']}
-        </p>
-      </main>
+      <div className={styles.wikiInfo} >
+        <div className="row">
+          <div className={styles.wikiInfoLeft}>
+              <h1 className={styles.title}>
+              {wikidata.truename}
+              </h1>
+              <h2 >
+              {wikidata.class}
+              </h2>
+              <p>
+                {wikidata.basicDescription}
+              </p>
+              <p>{wikidata.author}</p>
+            </div>
+          <div className={styles.wikiInfoRight}>
+          <Gallery imgdata={wikidata.image}/>
+            </div>
+        </div>
+      </div>
+      {elements}
+      
     </div>
 
     </>
@@ -52,22 +62,20 @@ const getWikidata = async () => {
 
 const getWikiServantData = async (name) => {
     var newinfo = {};
-    const data = await db.ref(`wiki/${name.servantid}/0`).get()
-    newinfo = data.val();
-    return newinfo;
-      
+    var docRef = db.collection(`wiki`).doc(name.servantid);
+    const data = await docRef.get();
+    newinfo = data.data();
+    const realtimedb = firebase.database();
+    const rtdata = await realtimedb.ref(`wiki/${name.servantid}/elements`).get();
+    newinfo.elements = rtdata.val();
+    return newinfo;   
   }
 
 export const getStaticPaths = async() => {
-    var wikidata = await getWikidata();
-    //TODO: change to use servant list instead to speed up
     var paths = []
-    Object.keys(wikidata).forEach(name => {
-        if(Array.isArray(wikidata[name])){
-          if(!wikidata[name][0]['isRef']){
-            paths.push({params:{servantid:wikidata[name][0]['name']}})
-          }
-        } 
+    const wikidata = await db.collection("wiki").where("isPublic","==",true).get();
+    wikidata.forEach((doc) =>{
+      paths.push({params:{servantid:doc.data().name}})
     })
     //console.log(paths);
     return {

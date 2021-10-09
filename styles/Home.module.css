@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: auto;
 }
 
 .main {
@@ -15,6 +15,39 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.wikiInfo {
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+  margin: 10px 0 10px 0;
+  padding: 10px 17px 10px 17px;
+  background: rgba(255, 255, 255, 0.6);
+  width: 90%;
+  white-space:pre-line;
+  word-wrap: normal;
+}
+
+.wikiInfoLeft {
+  float: left;
+  padding: 10px;
+  width: 60%;
+}
+
+.wikiInfoRight {
+  float: left;
+  padding: 10px;
+  width: 40%;
+}
+
+.servantPics{
+  max-width:100%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .footer {
@@ -52,12 +85,14 @@
 
 .title,
 .description {
+  word-wrap: normal;
   text-align: center;
 }
 
 .description {
   line-height: 1.5;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  text-align: left;
 }
 
 .code {
