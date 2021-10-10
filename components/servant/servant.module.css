@@ -6,8 +6,33 @@
     max-width: 100%
   }
 
+.galleryHolder{
+  max-width:100%;
+  position: relative;
+  top:0;
+  left:0;
+  border: 1px white solid;
+}
+.galleryBase{
+  position:relative;
+  max-width:100%;
+  top:0;
+  left:0;
+}
+.galleryOverlay{
+  position:absolute;
+  max-width:100%;
+  top: 0px;
+  left: 0px;
+}
+
 .indent{
     text-indent: 5%;
+}
+
+.moodButton{
+  float:right;
+  margin-left:10px;
 }
 
 .floatImage{
