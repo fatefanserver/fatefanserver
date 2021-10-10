@@ -8,11 +8,11 @@ class Gallery extends Component{
         curExp: ''
     }
     toggleImageF = () => {
-        this.setState(state => ({ num: this.state.num + 1 }));
+        this.setState(state => ({ num: this.state.num + 1, curExp: '' }));
         
       }
     toggleImageB = () => {
-        this.setState(state => ({ num: this.state.num - 1 }));
+        this.setState(state => ({ num: this.state.num - 1, curExp: ''}));
     }
     changeExp = (exp) => {
         this.setState(state => ({ curExp: exp}))
