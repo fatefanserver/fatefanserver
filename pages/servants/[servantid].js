@@ -55,14 +55,6 @@ const Home = ({wikidata}) => {
     </>
   )
 }
-const getWikidata = async () => {
-  var newinfo = {};
-  const data = await db.ref('wiki').get()
-  newinfo = data.val();
-      //console.log(newinfo);
-  return newinfo;
-    
-}
 
 const getWikiServantData = async (name) => {
     var newinfo = {};

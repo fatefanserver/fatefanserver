@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 
 const CustomRenderers = {
     p: ({children}) => {
-        const checkregexTags = /#fg/;
+        const checkregexTags = /#\w/;
         const regexFg = /\[([\S ][^\]]+)\]\{#(\w+) ([\S ][^\}]+)\}/g;
         for(var i = 0; i < children.length; i++){
             if(typeof(children[i]) === 'string'){
@@ -17,7 +17,6 @@ const CustomRenderers = {
                                     return <span className={styles[tag]} t={furigana[(i-1)/2][3]}>{v}</span>
                                 case 'c':
                                     return <span style={{color: furigana[(i-1)/2][3]}}>{v}</span>
-                                    
                                 case 'tp':
                                     return <div className={styles[tag]}>{v}<span className={styles.tooltiptext}>{furigana[(i-1)/2][3]}</span></div>
                             }
