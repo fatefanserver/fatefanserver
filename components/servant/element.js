@@ -1,15 +1,20 @@
 import styles from './servant.module.css'
-import ReactMarkdown from 'react-markdown';
 import SpecialText from './specialtext';
 
 
 const Transposable = ({data}) => {
     const items = [];
     data.forEach((i) => {
-        //var parseMarkdown = <ReactMarkdown children={i.text} components={renderers}/>;
-        var parseMarkdown = <SpecialText data={i.text}/>;
-        items.push(parseMarkdown);
+        //console.log(i.type);
+        if(i.type == "text"){
+            var parseMarkdown = <SpecialText data={i.text}/>;
+            items.push(parseMarkdown);
+            items.push(<hr/>);
+        }
+        
     })
+
+    items.pop();  //removes last break
     return(
     <div className={styles.gallery}>
         {items}

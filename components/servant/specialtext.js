@@ -4,22 +4,22 @@ import ReactMarkdown from 'react-markdown';
 const CustomRenderers = {
     p: ({children}) => {
         const checkregexTags = /#fg/;
-        const regexFg = /\[([\w ]+)\]\(#(\w\w) ([\w ]+)\)/g;
-        const regexTp = /\[([\w ]+)\]\(#tp ([\w ]+)\)/g;
+        const regexFg = /\[([\S ][^\]]+)\]\{#(\w+) ([\S ][^\}]+)\}/g;
         for(var i = 0; i < children.length; i++){
             if(typeof(children[i]) === 'string'){
                 if(checkregexTags.test(children[i])){
                     const furigana = [...children[i].matchAll(regexFg)];
-                    children[i] = children[i].split(/\[([\w ]+)\]\(#\w\w [\w ]+\)/g).map((v,i) => {
+                    children[i] = children[i].split(/\[([\S ][^\]]+)\]\{#\w+ [\S ][^\}]+\}/g).map((v,i) => {
                         if(i % 2){
                             var tag = furigana[(i-1)/2][2];
                             switch(tag){
                                 case 'fg':
-                                    return <div className={styles[tag]} t={furigana[(i-1)/2][3]}>{v}</div>
+                                    return <span className={styles[tag]} t={furigana[(i-1)/2][3]}>{v}</span>
+                                case 'c':
+                                    return <span style={{color: furigana[(i-1)/2][3]}}>{v}</span>
                                     
                                 case 'tp':
                                     return <div className={styles[tag]}>{v}<span className={styles.tooltiptext}>{furigana[(i-1)/2][3]}</span></div>
-                        
                             }
                         }
                         else{

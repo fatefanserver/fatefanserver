@@ -4,11 +4,15 @@ import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import Gallery from '../../components/servant/gallery'
 import Transposable from '../../components/servant/element.js'
+import SpecialText from '../../components/servant/specialtext.js';
 import React from 'react'
+import ReactMarkdown from 'react-markdown';
 
 const Home = ({wikidata}) => {
   const elements = [];
   wikidata.hasElements.forEach((i) => {
+    //console.log(wikidata.elements[i]);
+    elements.push(<h3>{wikidata.elements[i][0].title}</h3>)
     elements.push(
     <div className={styles.wikiInfo} >
       <Transposable data={wikidata.elements[i]}/>
