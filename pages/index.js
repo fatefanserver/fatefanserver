@@ -1,5 +1,5 @@
 import firebase from '../firebase/clientApp.js'
-const db = firebase.database();
+const db = firebase.firestore();
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -15,18 +15,14 @@ const Home = ({wikidata}) => {
     <th>Name</th>
     <th>Class</th>
   </tr>)
-  Object.keys(wikidata).forEach(name => {
-    if(Array.isArray(wikidata[name])){
-      if(!wikidata[name][0]['isRef']){
-        rows.push(
-          <tr>
-            <td><a href={`/servants/${encodeURIComponent(wikidata[name][0]['name'])}`}>{wikidata[name][0]['truename']}</a></td>
-            <td>{wikidata[name][0]['class']}</td>
-          </tr>
-        )
-      }
-    }
-  })
+    wikidata.forEach((i) => {
+      rows.push(
+        <tr>
+              <td><a href={`/servants/${encodeURIComponent(i.name)}`}>{i.truename}</a></td>
+              <td>{i.class}</td>
+            </tr>
+      )
+    })
   return(
     <>
     <div className={styles.container}>
@@ -61,21 +57,22 @@ const Home = ({wikidata}) => {
     </>
   )
 }
-const getWikidata = async () => {
-  var newinfo = {};
-  const data = await db.ref('wiki').get()
-  newinfo = data.val();
-      //console.log(newinfo);
-  return newinfo;
-    
+const getWikiServantData = async () => {
+  var newinfo = [];
+  const data = await db.collection("wiki").where("isPublic","==",true).get()
+  data.forEach((i) =>{
+    newinfo.push(i.data());
+  });
+  return newinfo;   
 }
 
 export const getStaticProps = async() => {
-  var wikidata = await getWikidata();
+  var wikidata = await getWikiServantData();
   wikidata =JSON.parse(JSON.stringify(wikidata));
+  //console.log(wikidata);
   return {
     props: {wikidata},
-      revalidate:1
+      revalidate: 1
       }
   
 }

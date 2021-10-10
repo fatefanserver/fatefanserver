@@ -17,6 +17,18 @@
   padding: 10px;
 }
 
+.forwardB{
+  position: absolute;
+  right: 10px;
+  top: 50%;
+}
+
+.backwardB{
+  position: absolute;
+  left: 10px;
+  top: 50%;
+}
+
 .iconImg {
     max-width: 50%;
     width: auto;
