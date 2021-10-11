@@ -36,7 +36,7 @@ class Gallery extends Component{
         </p>
     </div>
     <div className={styles.moodButton}>
-        <button onClick={() => this.changeExp('')}>basic</button>
+        {this.props.imgdata[curImage].expressions ? <button onClick={() => this.changeExp('')}>basic</button> : <div/>}
         {this.props.imgdata[curImage].expressions ? Object.keys(this.props.imgdata[curImage].expressions).map((i) => <button key={i} onClick={() => this.changeExp(this.props.imgdata[curImage].expressions[i])}>{i}</button>) : this.showWarn}
     </div>
     </div>)
