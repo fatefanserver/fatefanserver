@@ -3,6 +3,8 @@ import { Component } from 'react';
 
 
 class Gallery extends Component{
+    //num is for the current costume
+    //curExp is for the current expression
     state = {
         num: 0,
         curExp: ''

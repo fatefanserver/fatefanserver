@@ -1,13 +1,18 @@
 import styles from './servant.module.css'
 import SpecialText from './specialtext';
+import Voicebox from './voicebox';
 
 
 const Transposable = ({data}) => {
     const items = [];
     data.forEach((i) => {
-        //console.log(i.type);
-        const checkdash = /^-/;
+        //TODO: remove all the inserted line breaks
+        const checkdash = /^-/;  // to check for dashes and not make them into bullet lists
+
         switch (i.type){
+            case 'setting':
+                // check the setting entry
+                break;
             case 'text':
                 items.push(<SpecialText data={i.text}/>);
                 items.push(<hr/>);
@@ -23,9 +28,6 @@ const Transposable = ({data}) => {
                 items.push(<hr className={styles.resetSkill}/>);
                 break;
             case 'np':
-                if(i.image){
-                    items.push(<img className={styles.floatImage} src={i.image}/>);
-                }
                 items.push(<h3>{<SpecialText data={i.name}/>}</h3>);
                 items.push(<p className={styles.indent}>Rank: {<SpecialText data={i.rank.replace(checkdash,'–')}/>}</p>);
                 items.push(<p className={styles.indent}>Maximum Targets: {<SpecialText data={i.targets.replace(checkdash,'–')}/>}</p>);
@@ -33,6 +35,12 @@ const Transposable = ({data}) => {
                 items.push(<p className={styles.indent}>Classification: {<SpecialText data={i.classification.replace(checkdash,'–')}/>}</p>);
                 items.push(<SpecialText data={i.text}/>);
                 items.push(<hr/>);
+                break;
+            case 'voice':
+                // TODO: MAKE BG VARIABLE INSTEAD OF BEING HARDCODED
+                items.push(<Voicebox colour="#ff4488" data={i.text}/>);
+                items.push(<div/>);
+                break;
         }
 
         

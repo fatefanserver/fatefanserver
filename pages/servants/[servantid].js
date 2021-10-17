@@ -12,7 +12,7 @@ const Home = ({wikidata}) => {
   const elements = [];
   wikidata.hasElements.forEach((i) => {
     //console.log(wikidata.elements[i]);
-    elements.push(<h3>{wikidata.elements[i][0].title}</h3>)
+    elements.push(<h3 key={i}>{wikidata.elements[i][0].title}</h3>)
     elements.push(
     <div className={styles.wikiInfo} >
       <Transposable data={wikidata.elements[i]}/>
@@ -21,12 +21,13 @@ const Home = ({wikidata}) => {
   return(
     <>
     <div className={styles.container} style={{
-        backgroundColor: wikidata.bgColour,
+        backgroundColor: "#faf2f4",
       }}>
       <Head>
         <title>{wikidata.truename}</title>
         <meta name="description" content="Fate/Fanservant Server" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css"/>
       </Head>
 
       <div className={styles.wikiInfo} >

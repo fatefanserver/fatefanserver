@@ -26,6 +26,32 @@
   left: 0px;
 }
 
+.voiceLine{
+  background-color: #fff;
+  padding:20px;
+  margin:10px;
+}
+
+.loadText{
+  white-space: nowrap;
+  overflow: hidden;
+  width: 30em;
+  animation: type 4s steps(60, end); 
+}
+
+@keyframes type{ 
+  from { width: 0; } 
+} 
+
+.playIcon{
+  font-size: 25px;
+  padding-right:20px;
+  color:#fff;
+  top: 8px;
+  left: 16px;
+  font-size: 18px;
+}
+
 .indent{
     text-indent: 5%;
 }
