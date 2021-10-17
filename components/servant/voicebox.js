@@ -9,8 +9,8 @@ const Voicebox = ({colour,data}) => {
     return(<p style={{
         display: "flex",
         backgroundColor: colour,
-      }} className={styles.voiceLine}>{[<i className={"bi bi-play-circle-fill" + ' ' + styles.playIcon} ></i>,
-                                        <Typed
+      }} className={styles.voiceLine}>{[<i key="icon" className={"bi bi-play-circle-fill" + ' ' + styles.playIcon} ></i>,
+                                        <Typed key="para"
                     strings={[ReactDOMServer.renderToString(voicetext)]}
                     typeSpeed={8}
                     showCursor={false}
