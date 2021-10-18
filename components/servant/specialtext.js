@@ -2,7 +2,7 @@ import styles from './servant.module.css';
 import ReactMarkdown from 'react-markdown';
 
 const CustomRenderers = {
-    p: ({children}) => {
+    p: ({children, mode}) => {
         const checkregexTags = /#\w/;
         // checks for a pattern of [text]{#tag tag text} and returns them in capture groups.
         const regexFg = /\[([\S ][^\]]+)\]\{#(\w+) ([\S ][^\}]+)\}/g;
@@ -22,7 +22,13 @@ const CustomRenderers = {
                                     return <span style={{color: furigana[(i-1)/2][3]}}>{v}</span>
                                 case 'tp':
                                     // tooltip
-                                    return <div className={styles[tag]}>{v}<span className={styles.tooltiptext}>{furigana[(i-1)/2][3]}</span></div>
+                                    if(mode == 'scroll'){
+                                        return <div className={styles.tpd}>{v}<span className={styles.tooltiptext}>{furigana[(i-1)/2][3]}</span></div>
+                                    }
+                                    else{
+                                        return <div className={styles[tag]}>{v}<span className={styles.tooltiptext}>{furigana[(i-1)/2][3]}</span></div>
+                                    }
+                                    
                                 default:
                                     return v;
                             }
@@ -38,7 +44,7 @@ const CustomRenderers = {
     }
 }
 
-const SpecialText = ({data}) => {
+const SpecialText = ({data, mode}) => {
     return(
         <ReactMarkdown components={CustomRenderers}>{data}</ReactMarkdown>
     )
