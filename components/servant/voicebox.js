@@ -55,9 +55,11 @@ class Voicebox extends Component{
         }
     }
     stopTyping = () => {
-        this.typed.destroy();
-        this.setState(state => ({isDone: true, firstLoop: true}));
-        this.toggleIcon();
+        if(this.state.buttonState == "pause"){
+            this.typed.destroy();
+            this.setState(state => ({isDone: true, firstLoop: true}));
+            this.toggleIcon();
+        }
     }
     getButton = () => this.state.buttonState;
     getDone = () => this.state.isDone;
