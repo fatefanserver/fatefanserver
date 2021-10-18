@@ -22,7 +22,7 @@ const CustomRenderers = {
                                     return <span style={{color: furigana[(i-1)/2][3]}}>{v}</span>
                                 case 'tp':
                                     // tooltip
-                                    return <div className={styles[tag]}>{v}<span className={styles.tooltiptext}>{'`' + furigana[(i-1)/2][3] + '`'}</span></div>
+                                    return <div className={styles[tag]}>{v}<span className={styles.tooltiptext}>{furigana[(i-1)/2][3]}</span></div>
                                 default:
                                     return v;
                             }

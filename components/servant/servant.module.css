@@ -26,6 +26,11 @@
   left: 0px;
 }
 
+.voiceText{
+  overflow:auto;
+  min-width: 100%;
+}
+
 .voiceLine{
   background-color: #fff;
   padding:20px;
