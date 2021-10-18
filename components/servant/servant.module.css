@@ -27,7 +27,7 @@
 }
 
 .voiceText{
-  overflow-y: scroll;
+  overflow-y: auto;
   min-width: 100%;
 }
 
@@ -49,12 +49,15 @@
 } 
 
 .playIcon{
-  font-size: 25px;
-  padding-right:20px;
+
   color:#fff;
   top: 8px;
   left: 16px;
   font-size: 18px;
+}
+
+.playIcon:hover{
+  cursor:pointer;
 }
 
 .indent{
