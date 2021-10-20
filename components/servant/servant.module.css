@@ -6,6 +6,15 @@
     max-width: 100%
   }
 
+.galleryHolderVoice{
+  max-width: 500px;
+  position: relative;
+  margin-left: 20px;
+  top:0;
+  left:0;
+  border: 1px white solid;
+}
+
 .galleryHolder{
   max-width:100%;
   position: relative;
@@ -22,8 +31,17 @@
 .galleryOverlay{
   position:absolute;
   max-width:100%;
-  top: 0px;
-  left: 0px;
+}
+.voiceTestBox{
+  background-color: rgba(0,0,0,0.7);
+  width: 100%;
+  margin:auto;
+  height: 125px;
+  color: white;
+  overflow:auto;
+  border-radius:6px;
+  border: 2px black solid;
+  padding: 10px 10px 10px 10px
 }
 
 .voiceText{
@@ -58,6 +76,7 @@
   top: 8px;
   left: 16px;
   font-size: 18px;
+  height: 18px;
 }
 
 .playIcon:hover{

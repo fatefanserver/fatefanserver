@@ -32,7 +32,7 @@ class Gallery extends Component{
     <button onClick={this.state.num < trynum ? this.toggleImageF : this.showWarn} disabled={this.state.num == trynum ? true : false}>&gt;</button>
     <div className={styles.galleryHolder}>
         <img src={this.props.imgdata[curImage].url} className={styles.galleryBase}/>
-        <img src={curExp} className={styles.galleryOverlay}/>
+        <img src={curExp} className={styles.galleryOverlay} style={{top: "0px", left: "0px"}}/>
         <p >
             {this.props.imgdata[curImage].description}
         </p>

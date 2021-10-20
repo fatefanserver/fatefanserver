@@ -1,10 +1,13 @@
 import styles from './servant.module.css'
 import SpecialText from './specialtext';
 import Voicebox from './voicebox';
-
+import VoiceDisplay from './voiceDisplay';
 
 const Transposable = ({data}) => {
+    var currentMode = "default";
     const items = [];
+    const voiceItems = [];
+    var expSheet;
     data.forEach((i) => {
         //TODO: remove all the inserted line breaks
         const checkdash = /^-/;  // to check for dashes and not make them into bullet lists
@@ -12,6 +15,10 @@ const Transposable = ({data}) => {
         switch (i.type){
             case 'setting':
                 // check the setting entry
+                if(i.isVNBox){
+                    currentMode = "voice";
+                    expSheet = i.expressionsheet;
+                }
                 break;
             case 'text':
                 items.push(<SpecialText data={i.text}/>);
@@ -38,14 +45,22 @@ const Transposable = ({data}) => {
                 break;
             case 'voice':
                 // TODO: MAKE BG VARIABLE INSTEAD OF BEING HARDCODED
-                items.push(<Voicebox colour="#ff4488" data={i.text}/>);
+                if(currentMode == "voice"){
+                    voiceItems.push(i.text);
+                }
+                else{
+                    items.push(<Voicebox colour="#ff4488" data={i.text}/>);
+                    items.push(<p/>)
+                }
                 items.push(<div/>);
                 break;
         }
 
         
     })
-
+    if(currentMode == "voice"){
+        items.unshift(<VoiceDisplay colour="#ff4488" expSheet={expSheet} voiceItems={voiceItems}/>);
+    }
     items.pop();  //removes last break
     return(
     <div className={styles.gallery}>

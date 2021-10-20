@@ -68,19 +68,21 @@ class Voicebox extends Component{
     const curButton = this.getButton();
     const stateDone = this.getDone();
     const loopState = this.getLoop();
-    return(<p style={{
+    return(<div style={{
         display: "flex",
         backgroundColor: this.props.colour,
         maxHeight: "100px",
         minHeight: this.state.minHeight,
         position: "relative",
+        margin: "0 10px 0 10px",
+        borderBottom: "1px solid white",
       }} className={styles.voiceLine}>{[<i key="icon" onClick={() => stateDone ? this.resetIcon() : this.pauseIcon()} 
                                         className={"bi bi-"+curButton+"-circle-fill" + ' ' + styles.playIcon}/>,
                 <span key="padIcon" style={{paddingRight:"20px"}}></span>,
                 <i key="holdText" onClick={loopState ? null : () => this.stopTyping()} className={styles.voiceText}><span ref={(el) => { this.el = el; }} key="para"/>{
                     <SpecialText data={loopState ? this.props.data : ''} key="para2" mode={"scroll"}/>
                 }</i>]}
-            </p>);
+            </div>);
     }
 }
 
