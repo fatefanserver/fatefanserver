@@ -9,6 +9,7 @@ class Voicebox extends Component{
         buttonState: "play",
         isDone: true,
         minHeight: 50,
+        minWidth: "inherit",
         // PUT MAX HEIGHT HERE
         maxHeight: 100,
         firstLoop: true,
@@ -43,8 +44,8 @@ class Voicebox extends Component{
     }
     resetIcon = () => {
         if(this.state.firstLoop){
-            var curheight = this.el.parentElement.parentElement.getBoundingClientRect().height;
-            this.setState(state => ({ firstLoop: false, isDone: false, minHeight: curheight}));
+            var curval = this.el.parentElement.parentElement.getBoundingClientRect();
+            this.setState(state => ({ firstLoop: false, isDone: false, minHeight: curval.height, minWidth: curval.width}));
             this.typed.reset();
             this.toggleIcon();
         }
@@ -73,6 +74,7 @@ class Voicebox extends Component{
         backgroundColor: this.props.colour,
         maxHeight: "100px",
         minHeight: this.state.minHeight,
+        minWidth: this.state.minWidth,
         position: "relative",
         margin: "0 10px 0 10px",
         borderBottom: "1px solid white",
