@@ -24,14 +24,14 @@ class VoiceDisplay extends Component{
         return(<div style={{
             display: "flex",
             }}>
-                <div>{this.props.voiceItems.map((v,i) => 
-                    <div onClick={() => curLine == i ? this.resetLine() : this.setLine(v,i)}><Voicebox 
+                <div key="d1">{this.props.voiceItems.map((v,i) => 
+                    <div key={i} onClick={() => curLine == i ? this.resetLine() : this.setLine(v,i)}><Voicebox 
                           colour={curLine == i ? this.state.selectColour : this.state.colour} 
-                          key={i} data={v}/></div>
+                          key={i+"voice"} data={v}/></div>
                 )}</div>
-                <div className={styles.galleryHolderVoice}>
-                    <img className={styles.galleryBase} src={this.props.expSheet.base}/>
-                    <div className={styles.galleryOverlay + ' ' + styles.voiceTestBox} 
+                <div key="d2" className={styles.galleryHolderVoice}>
+                    <img key="gallerybase" className={styles.galleryBase} src={this.props.expSheet.base}/>
+                    <div key="voicetest" className={styles.galleryOverlay + ' ' + styles.voiceTestBox} 
                          style={{top: "450px", left: "0px"}}
                     >{curText}</div>
                 </div>

@@ -14,7 +14,7 @@ const Home = ({wikidata}) => {
     //console.log(wikidata.elements[i]);
     elements.push(<h3 key={i}>{wikidata.elements[i][0].title}</h3>)
     elements.push(
-    <div className={styles.wikiInfo} >
+    <div className={styles.wikiInfo} key={i+"t"}>
       <Transposable data={wikidata.elements[i]}/>
     </div>)
   })
