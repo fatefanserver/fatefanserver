@@ -67,6 +67,9 @@
 .voiceTestBox::-webkit-scrollbar-thumb{
   background:#000;
 }
+.voiceTestBox::-webkit-scrollbar-track{
+  background: rgba(0,0,10,0.2);
+}
 
 .voiceText{
   overflow-y: auto;
