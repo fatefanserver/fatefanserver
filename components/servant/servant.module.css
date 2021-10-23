@@ -118,7 +118,7 @@
   overflow-x:hidden;
   border-radius:6px;
   border: 2px black solid;
-  padding: 10px 30px 10px 10px
+  padding: 10px 30px 10px 10px;
 }
 
 .voiceTestBox::-webkit-scrollbar{
@@ -289,7 +289,7 @@ Used for scrollable sections
 */
 .tpd {
   display: inline-block;
-  border-bottom: 1px dotted black; 
+  border-bottom: 1px dotted; 
 }
 
 .tpd .tooltiptext {

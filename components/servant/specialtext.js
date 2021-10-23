@@ -63,7 +63,8 @@ const CustomRenderersScroll = {
                                     return <span key={i} style={{color: furigana[(i-1)/2][3]}}>{v}</span>
                                 case 'tp':
                                     // tooltip
-                                    return <div key={i} className={styles.tpd}>{v}<span className={styles.tooltiptext}>{'`'+ furigana[(i-1)/2][3] + '`'}</span></div>
+                                    //return <div key={i} className={styles.tpd}>{v}<span className={styles.tooltiptext}>{'`'+ furigana[(i-1)/2][3] + '`'}</span></div>
+                                    return <div key={i} className={styles.tpd} title={furigana[(i-1)/2][3]}>{v}</div>
                                 default:
                                     return v;
                             }

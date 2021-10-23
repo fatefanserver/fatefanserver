@@ -92,6 +92,7 @@ class VoiceDisplay extends Component{
         const isLast = this.getLast();
         return(<div style={{
             display: "flex",
+            position:"relative"
             }}>
                 <div key="d1">{this.props.voiceItems.map((v,i) => 
                     <div key={i} onClick={() => curLine  == i ? null : this.setLine(i)}><Voicebox 
@@ -115,7 +116,7 @@ class VoiceDisplay extends Component{
                              }
                         }}>
                         <div ref={(el) => { this.el = el; }}/>
-                        <SpecialText data={isDone && curLine >= 0 ? curText : ''} mode={"scroll"}/>
+                        <SpecialText  data={isDone && curLine >= 0 ? curText : ''} mode={"scroll"}/>
                     </div>
                     <div className={isDone && curLine >= 0 && !isLast ? styles.galleryOverlay+' '+styles["arrow-down"]+" bi bi-caret-down-fill" : ''} 
                          style={{top:"85%",left:"94%"}}></div>

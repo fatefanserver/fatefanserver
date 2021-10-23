@@ -47,7 +47,8 @@ const Home = ({wikidata}) => {
                 if(wikidata[v]){
                   if(v == 'stats'){
                     return(<table key={'stats'} style={{border:"1px solid #f1f1f1"}}>
-                      <tr>Stats</tr>
+                      <tbody>
+                      <tr><td>Stats</td></tr>
                       <tr>
                         <td>STR: </td>
                         <td style={{paddingRight:"20px"}}>{wikidata.stats.STR}</td>
@@ -66,6 +67,7 @@ const Home = ({wikidata}) => {
                         <td>NP: </td>
                         <td style={{paddingRight:"20px"}}>{wikidata.stats.NP}</td>
                       </tr>
+                      </tbody>
                     </table>)
                   }
                   else{
