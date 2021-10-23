@@ -80,9 +80,11 @@ class Voicebox extends Component{
       }} className={styles.voiceLine}>{[<i key="icon" onClick={() => stateDone ? this.resetIcon() : this.pauseIcon()} 
                                         className={"bi bi-"+curButton+"-circle-fill" + ' ' + styles.playIcon}/>,
                 <span key="padIcon" style={{paddingRight:"20px"}}></span>,
-                <i key="holdText" onClick={loopState ? null : () => this.stopTyping()} className={styles.voiceText}><span ref={(el) => { this.el = el; }} key="para"/>{
-                    <SpecialText data={loopState ? this.props.data : ''} key="para2" mode={"scroll"}/>
-                }</i>]}
+                <i key="holdText" onClick={loopState ? null : () => this.stopTyping()} className={styles.voiceText}>
+                    <span ref={(el) => { this.el = el; }} key="para"/>{
+                        <SpecialText data={loopState ? this.props.data : ''} key="para2" mode={"scroll"}/>
+                    }
+                </i>]}
             </div>);
     }
 }

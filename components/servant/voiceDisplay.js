@@ -35,21 +35,22 @@ class VoiceDisplay extends Component{
     setLine = (line) => {
 
         // destroy current instance of typed, remove static text
-        this.state.isDone = false;
         this.typed.destroy();
         var voiceLine;
+        var LinePos = this.state.curLinePos + 1;
+        var iscurLast = this.state.isLast;
         // check if previous line is same, if not, reset position to 0
         if(this.state.curLine == line){
-            this.state.curLinePos = this.state.curLinePos + 1;
+            this.setState(state => ({curLinePos: LinePos}));
         }
         else{
-            this.state.curLinePos = 0;
-            this.state.curMood = this.props.expSheet.base;
-            this.state.isLast = false;
+            this.setState(state => ({curLinePos: 0,curMood:this.props.expSheet.base,isLast:false}));
+            LinePos = 0;
+            iscurLast = false;
         }
         
-        if(!this.state.isLast){
-            const getvoicestring = this.allLineStrings[line][this.state.curLinePos];
+        if(!iscurLast){
+            const getvoicestring = this.allLineStrings[line][LinePos];
             const checkmood = this.regEx.exec(getvoicestring);
             if(checkmood){
                 this.setState(state => ({curMood: this.props.expSheet[checkmood[1]]}));  // set new mood
@@ -67,7 +68,7 @@ class VoiceDisplay extends Component{
             this.typed = new Typed(this.el, options);
         }
         //update values
-        this.setState(state => ({isLast: this.state.curLinePos == this.allLineStrings[line].length - 1}));
+        this.setState(state => ({isDone: false, isLast: LinePos == this.allLineStrings[line].length - 1}));
     }
     onDone = () => {
         this.setState(state => ({ isDone: true}));
@@ -109,7 +110,7 @@ class VoiceDisplay extends Component{
                              }
                         }}>
                         <div ref={(el) => { this.el = el; }}/>
-                        <SpecialText data={isDone && curLine >= 0 ? curText : ''}/>
+                        <SpecialText data={isDone && curLine >= 0 ? curText : ''} mode={"scroll"}/>
                     </div>
                     <div className={isDone && curLine >= 0 && !isLast ? styles.galleryOverlay+' '+styles["arrow-down"]+" bi bi-caret-down-fill" : ''} 
                          style={{top:"85%",left:"94%"}}></div>
