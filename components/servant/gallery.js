@@ -27,21 +27,22 @@ class Gallery extends Component{
         const curExp = this.getExp();
         const trynum =  Object.keys(this.props.imgdata).length - 1;
         return(
-        <div className={styles.gallery}>
-    <button onClick={this.state.num > 0 ? this.toggleImageB : this.showWarn} disabled={this.state.num == 0 ? true : false}>&lt;</button>
-    <button onClick={this.state.num < trynum ? this.toggleImageF : this.showWarn} disabled={this.state.num == trynum ? true : false}>&gt;</button>
-    <div className={styles.galleryHolder}>
-        <img src={this.props.imgdata[curImage].url} className={styles.galleryBase}/>
-        <img src={curExp} className={styles.galleryOverlay} style={{top: "0px", left: "0px"}}/>
-        <p >
-            {this.props.imgdata[curImage].description}
-        </p>
-    </div>
-    <div className={styles.moodButton}>
-        {this.props.imgdata[curImage].expressions ? <button onClick={() => this.changeExp('')}>basic</button> : <div/>}
-        {this.props.imgdata[curImage].expressions ? Object.keys(this.props.imgdata[curImage].expressions).map((i) => <button key={i} onClick={() => this.changeExp(this.props.imgdata[curImage].expressions[i])}>{i}</button>) : this.showWarn}
-    </div>
-    </div>)
+            <div className={styles.gallery}>
+                <button onClick={this.state.num > 0 ? this.toggleImageB : this.showWarn} disabled={this.state.num == 0 ? true : false}>&lt;</button>
+                <button onClick={this.state.num < trynum ? this.toggleImageF : this.showWarn} disabled={this.state.num == trynum ? true : false}>&gt;</button>
+                <div className={styles.galleryHolder}>
+                    <img src={curExp == '' ? this.props.imgdata[curImage].url : ''} className={styles.galleryBase}/>
+                    <img src={curExp} className={styles.galleryOverlay} style={{top: "0px", left: "0px"}}/>
+                </div>
+                    <p >
+                        {this.props.imgdata[curImage].description}
+                    </p>
+            <div className={styles.moodButton}>
+                {this.props.imgdata[curImage].expressions ? <button onClick={() => this.changeExp('')}>basic</button> : <div/>}
+                {this.props.imgdata[curImage].expressions ? Object.keys(this.props.imgdata[curImage].expressions).map((i) => <button key={i} onClick={() => this.changeExp(this.props.imgdata[curImage].expressions[i])}>{i}</button>) : <div/>}
+            </div>
+        </div>
+        )
     }
 
 }

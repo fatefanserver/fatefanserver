@@ -34,7 +34,6 @@ class Voicebox extends Component{
         this.setState(state => ({ buttonState: this.state.buttonState == "play" ? "pause" : "play"}));
     }
     onDone = () => {
-        
         this.setState(state => ({ isDone: true}));
         this.toggleIcon();
     }
