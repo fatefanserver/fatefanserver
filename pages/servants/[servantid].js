@@ -45,7 +45,11 @@ const Home = ({wikidata}) => {
               </p>
               {servantAttributes.map((v,i) => {
                 if(wikidata[v]){
-                  if(v == 'stats'){
+                  if(v == 'aka'){
+                    //use for traits later
+                    return(<p key={'aka'}>{'AKA: '+wikidata[v].join(', ')}</p>)
+                  }
+                  else if(v == 'stats'){
                     return(<table key={'stats'} style={{border:"1px solid #f1f1f1"}}>
                       <tbody>
                       <tr><td>Stats</td></tr>
