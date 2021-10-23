@@ -12,7 +12,7 @@ class VoiceDisplay extends Component{
     **/
     state = {
         colour: this.props.colour,  // colour of the boxes
-        selectColour: "#ff88aa",  // TODO: change to variable
+        selectColour: this.props.sColour,  // TODO: change to variable
         curLine: -1,  //index of the current line (out of all lines in the segment)
         curLinePos: -1,  // the subsection of the line currently on
         curMood: this.props.expSheet.base,  // current mood

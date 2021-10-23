@@ -6,7 +6,7 @@ import Gallery from '../../components/servant/gallery'
 import Transposable from '../../components/servant/element.js'
 import SpecialText from '../../components/servant/specialtext.js';
 import React from 'react'
-import ReactMarkdown from 'react-markdown';
+import Link from 'next/link'
 
 const Home = ({wikidata}) => {
   // TODO: move to its own file, initialize page values
@@ -19,7 +19,7 @@ const Home = ({wikidata}) => {
     elements.push(<h3 key={i} id={wikidata.elements[i][0].title}>{wikidata.elements[i][0].title}</h3>)
     elements.push(
     <div className={styles.wikiInfo} key={i+"t"}>
-      <Transposable data={wikidata.elements[i]}/>
+      <Transposable data={wikidata.elements[i]} bgColour={wikidata.bgColour} sColour={wikidata.sColour}/>
     </div>)
   })
   return(
@@ -33,7 +33,14 @@ const Home = ({wikidata}) => {
         <link rel="icon" href="/ffs.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css"/>
       </Head>
-
+      <div style={{backgroundColor: wikidata.bgColour, width:"100%"}}>
+        <h1 className="title" style={{textAlign:"center"}}>
+          <Link  href="/">
+            <a>Servant List</a>
+          </Link>
+          <span style={{marginLeft:"100px"}}>FFS</span>
+        </h1>
+      </div>
       <div className={styles.wikiInfo} >
         <div className="row">
           <div className={styles.wikiInfoLeft}>

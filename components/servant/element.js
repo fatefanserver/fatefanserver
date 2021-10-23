@@ -4,7 +4,7 @@ import Voicebox from './voicebox';
 import VoiceDisplay from './voiceDisplay';
 import ImageGallery from './imggallery';
 
-const Transposable = ({data}) => {
+const Transposable = ({data, bgColour, sColour}) => {
     var currentMode = "default";
     const items = [];
     const voiceItems = [];
@@ -51,7 +51,7 @@ const Transposable = ({data}) => {
                     voiceItems.push(i.text);
                 }
                 else{
-                    items.push(<Voicebox key={counter} colour="#ff4488" data={i.text}/>);
+                    items.push(<Voicebox key={counter} colour={bgColour} data={i.text}/>);
                     items.push(<p key={counter+'p'}/>)
                 }
                 items.push(<div key={counter+'b'}/>);
@@ -67,7 +67,7 @@ const Transposable = ({data}) => {
         
     })
     if(currentMode == "voice"){
-        items.unshift(<VoiceDisplay key={'v'} colour="#ff4488" expSheet={expSheet} voiceItems={voiceItems}/>);
+        items.unshift(<VoiceDisplay key={'v'} sColour={sColour} colour={bgColour} expSheet={expSheet} voiceItems={voiceItems}/>);
     }
     items.pop();  //removes last break
     return(
