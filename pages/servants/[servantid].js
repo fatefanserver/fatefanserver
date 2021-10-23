@@ -12,7 +12,7 @@ const Home = ({wikidata}) => {
   const elements = [];
   wikidata.hasElements.forEach((i) => {
     //console.log(wikidata.elements[i]);
-    elements.push(<h3 key={i}>{wikidata.elements[i][0].title}</h3>)
+    elements.push(<h3 key={i} id={wikidata.elements[i][0].title}>{wikidata.elements[i][0].title}</h3>)
     elements.push(
     <div className={styles.wikiInfo} key={i+"t"}>
       <Transposable data={wikidata.elements[i]}/>
@@ -26,7 +26,7 @@ const Home = ({wikidata}) => {
       <Head>
         <title>{wikidata.truename}</title>
         <meta name="description" content="Fate/Fanservant Server" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/ffs.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css"/>
       </Head>
 

@@ -29,7 +29,7 @@ const Home = ({wikidata}) => {
       <Head>
         <title>Fate/Fanservant Server</title>
         <meta name="description" content="Fate/Fanservant Server" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/ffs.ico" />
       </Head>
 
       <main className={styles.main}>

@@ -2,6 +2,7 @@ import styles from './servant.module.css'
 import SpecialText from './specialtext';
 import Voicebox from './voicebox';
 import VoiceDisplay from './voiceDisplay';
+import ImageGallery from './imggallery';
 
 const Transposable = ({data}) => {
     var currentMode = "default";
@@ -53,6 +54,10 @@ const Transposable = ({data}) => {
                     items.push(<Voicebox key={counter} colour="#ff4488" data={i.text}/>);
                     items.push(<p key={counter+'p'}/>)
                 }
+                items.push(<div key={counter+'b'}/>);
+                break;
+            case 'gallery':
+                items.push(<ImageGallery key={counter} imgdata={i.img}/>);
                 items.push(<div key={counter+'b'}/>);
                 break;
         }

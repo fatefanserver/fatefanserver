@@ -7,7 +7,8 @@ import Voicebox from './voicebox';
 class VoiceDisplay extends Component{
     //** format like this:
     /*   [m:mood]Line1|[m:mood]Line2|[m:mood]Line3
-    //   automatically scroll down
+    /*   automatically scroll down
+    /*   \|\s*|\|*\s*(?:\[[man]: *\w+\]\s*)+ <-- use this later when including name and animation
     **/
     state = {
         colour: this.props.colour,  // colour of the boxes
@@ -18,6 +19,7 @@ class VoiceDisplay extends Component{
         curLineText: '',  // current text of the line in case user skips
         isDone: true,
         isLast: false,
+        isAnim: null,
     }
     regEx = /^\s*\[m: *(\w+)\]/g;  // find pattern of [mood]line
     allLineStrings = this.props.voiceItems.map((v) => {
@@ -75,7 +77,7 @@ class VoiceDisplay extends Component{
         this.typed.destroy();
     }
     resetLine = () => {
-        this.setState(state => ({ curLine: -1, curLinePos: -1, curMood: this.props.expSheet.base, isDone: true, isLast: false}));
+        this.setState(state => ({ curLine: -1, curLinePos: -1, curMood: this.props.expSheet.base, isDone: true, isLast: false, isAnim: null}));
     }
     getCurLine = () => this.state.curLine;
     getCurMood = () => this.state.curMood;
@@ -97,7 +99,10 @@ class VoiceDisplay extends Component{
                           key={i+"voice"} data={v}/></div>
                 )}</div>
                 <div key="d2" className={styles.galleryHolderVoice}>
-                    <img key="gallerybase" className={styles.galleryBase} src={curMood ? curMood : this.props.expSheet.base}/>
+                    <img key="gallerybase" className={styles.galleryBase} 
+                                           src={curMood ? curMood : this.props.expSheet.base}
+                                           style={{animation: this.state.isAnim ? styles[this.state.isAnim]+" 0.5s 1 normal" : ""}}
+                                           />
                     <div key="voicetest" className={styles.galleryOverlay + ' ' + styles.voiceTestBox} 
                          style={{top: "75%", left: "0px"}}
                          onClick={() => {
