@@ -20,13 +20,16 @@ class CharacterPage extends Component{
         
       
         const elements = [];
-        wikidata.hasElements ? wikidata.hasElements.forEach((i) => {
-          elements.push(<h3 key={i} id={wikidata.elements[i][0].title}>{wikidata.elements[i][0].title}</h3>)
+        if(wikidata.elements.length > 0){
+          wikidata.elements[0][0].title.length > 0 ? wikidata.elements.map((i,j) => {
+          elements.push(<h3 key={j} id={i[0].title}>{i[0].title}</h3>)
           elements.push(
-          <div className={styles.wikiInfo} key={i+"t"}>
-            <Transposable data={wikidata.elements[i]} bgColour={wikidata.bgColour} sColour={wikidata.sColour}/>
+          <div className={styles.wikiInfo} key={j+"t"}>
+            <Transposable data={i} bgColour={wikidata.bgColour} sColour={wikidata.sColour}/>
           </div>)
         }) : null;
+        }
+        
         return(
             <>
             <div className={styles.wikiInfo} >

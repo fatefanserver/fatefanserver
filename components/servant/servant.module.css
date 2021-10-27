@@ -133,7 +133,6 @@
 
 .voiceText{
   overflow-y: auto;
-  min-width: 100%;
   padding-right: 25px;
 }
 

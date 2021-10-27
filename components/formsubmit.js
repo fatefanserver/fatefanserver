@@ -89,7 +89,8 @@ const Expressions = ({index,formik}) => {
         <button
           type="button"
           className="secondary"
-          onClick={() => arrayExpression.push({ expressionName: '', url: '' })}>
+          onClick={() => arrayExpression.push({ expressionName: '', url: '' })}
+          disabled={formik.values.image[index].expression.length >= 25 ? true : false}>
           + Expression
         </button>
         {formik.values.image[index].expression.length > 0 && formik.values.image[index].expression.map((expimg, expindex) => 
@@ -122,7 +123,94 @@ const Expressions = ({index,formik}) => {
       )}
     </FieldArray>)
 }
+
+const ElementText = ({index,eindex,formik,type}) => {
+  switch(type){
+    case 'text':
+      return(
+    <TextArea disabled={formik.isSubmitting}
+      style={{height:"100px",width:"100%"}}
+        className={styles.heighttext}
+        label="Text "
+        name={`elements[${index}][${eindex}].text`}
+        type="text"
+        placeholder="You can use Markdown for images here!" 
+    />
+  )
+     case 'voice':
+      formik.values.elements[index][eindex].title ? null : formik.values.elements[index][eindex].title = '';
+       return(
+         <>
+         <MyTextInput disabled={formik.isSubmitting}
+          className={styles.heighttext}
+          label="Title (optional) "
+          name={`elements[${index}][${eindex}].title`}
+          type="text"
+          placeholder="Likes"
+      /><br/>
+        <TextArea disabled={formik.isSubmitting}
+        style={{height:"100px",width:"100%"}}
+          className={styles.heighttext}
+          label="Text "
+          name={`elements[${index}][${eindex}].text`}
+          type="text"
+          placeholder="I like fighting people!" 
+      />
+      </>
+       )
+    default:
+      return <div/>
+  }
   
+}
+
+const ElementParts = ({index,formik}) => {
+  //const [index,expression] = useField(props);
+    return(
+      <FieldArray name={`elements.${index}`}>
+      {arrayExpression => (
+        <>
+        <br/>
+        
+        {formik.values.elements[index].length > 0 && formik.values.elements[index].map((expimg, eindex) => 
+          <div key={expimg+'ee'+eindex}> {formik.values.elements[index][eindex].type != 'setting' ?
+          <div key={index+'e'+eindex} className={styles.individualform}>
+          <MySelect disabled={formik.isSubmitting}
+              label="Subsection Type "
+              name={`elements[${index}][${eindex}].type`}
+              type="text"
+              placeholder="Text"
+            >
+          <option value="text">Text</option>
+          <option value="voice">Voice Line</option>
+          <option value="voiceBox">Voice Line Box (VN)</option>
+          <option value="np">NP</option>
+          <option value="skill">Skill</option>
+          <option value="gallery">Image Gallery</option>
+        </MySelect>
+        {<ElementText formik={formik} index={index} eindex={eindex} type={formik.values.elements[index][eindex].type}/>}
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => arrayExpression.remove(eindex)}
+            style={{marginRight:"30px"}}>
+            X
+            
+          </button>
+          </div> : 
+          null}</div>
+        )}
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => {arrayExpression.push({ type: 'text'}); }}
+          disabled={formik.values.elements[index].length >= 10 ? true : false}>
+          + Subsection
+        </button>
+        </>
+      )}
+    </FieldArray>)
+}
 /*
 <MySelect label="Job Type" name="jobType" disabled={formik.isSubmitting}>
                         <option value="">Select a job type</option>
@@ -132,13 +220,25 @@ const Expressions = ({index,formik}) => {
                         <option value="other">Other</option>
                     </MySelect>
 */
+/*
+function randomColor(){
+  //const colors = ['#fff6f7','#aaf6f7','#faf6ff','#faa6f0','#aff6a0','#afe6e0','#6fffa1']
+  //return(colors[Math.floor(Math.random() * colors.length)])
+  const hex = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+  const hex2 = ['a','b','c','d','e','f']
+  return("#"+hex2[Math.floor(Math.random() * hex2.length)]+hex[Math.floor(Math.random() * hex.length)]+
+  hex2[Math.floor(Math.random() * hex2.length)]+hex[Math.floor(Math.random() * hex.length)]+
+  hex2[Math.floor(Math.random() * hex2.length)]+hex[Math.floor(Math.random() * hex.length)])
+}
+const randomColours = [randomColor(),randomColor(),randomColor()];*/
 
 class FormSubmit extends Component{
   state = {
     isPreview: false,
     submitValues: {},
+    hasEl: false,
   }
-
+  
     render(){
       const defaultSchema = Yup.string().max(64,'Must be 64 characters or less');
       
@@ -154,8 +254,8 @@ class FormSubmit extends Component{
             artist:'',writer:'',aka:'',height:'',weight:'',gender:'',region:'',source:'',timeperiod:'',alignment:'',attribute:'',
             stats: {AGI: '', END: '', LUK: '', MP:'',NP:'',STR:''},
             basicDescription: '',
-            bgColour: '',
-            sColour: '',
+            bgColour: '#aaf6f7',
+            sColour: '#faf6ff',
             bckColour: '#fff6f7',
             aka: [
               ''
@@ -167,7 +267,11 @@ class FormSubmit extends Component{
                expression: [
                  
                ]}
-            ]
+            ],
+            elements: [
+              [{type:'setting',
+              title:''}]
+              ],
           }}
           validationSchema={Yup.object({
             acceptedTerms: Yup.boolean(),
@@ -201,7 +305,8 @@ class FormSubmit extends Component{
               STR: defaultSchema,
             }),
             aka: Yup.array()
-                .of(defaultSchema),
+                .of(defaultSchema)
+                .max(10,'Cannot have more than 10'),
             sColour: defaultSchema,
             bgColour: defaultSchema,
             bckColour: defaultSchema,
@@ -378,7 +483,8 @@ class FormSubmit extends Component{
                           <button
                             type="button"
                             className="secondary"
-                            onClick={() => arrayHelpersAka.push('')}>
+                            onClick={() => arrayHelpersAka.push('')}
+                            disabled={formik.values.aka.length >= 10 ? true : false}>
                             +
                           </button>
                           <div className={styles.individualform}>
@@ -426,7 +532,8 @@ class FormSubmit extends Component{
                       <button
                         type="button"
                         className="secondary"
-                        onClick={() => arrayHelpersImg.push({ description: '', url: '' ,name:'',expression:[]})}>
+                        onClick={() => arrayHelpersImg.push({ description: '', url: '' ,name:'',expression:[]})}
+                        disabled={formik.values.image.length >= 10 ? true : false}>
                         + Image
                       </button>
                       <div >
@@ -475,11 +582,52 @@ class FormSubmit extends Component{
                       )}
                     </FieldArray>
                     <p/>
+                    <FieldArray name="elements">
+                        {arrayHelpersE =>(
+                          <>
+                          <b>Sections </b>
+                          <span className={styles2.tp+" bi bi-question-circle-fill"} style={{marginLeft:"10px",marginRight:'20px'}}>
+                          <span className={styles2.tooltiptext}>{"You can put anything you want here. For example, character details, image galleries..."}</span></span>
+                          <button
+                            type="button"
+                            className="secondary"
+                            onClick={() => {arrayHelpersE.push([{type:'setting',title:''}])}}
+                            disabled={formik.values.elements.length >= 15 ? true : false}>
+                            +
+                          </button>
+                          <div >
+                          {formik.values.elements.length > 0 && formik.values.elements.map((e, index) => 
+                          <div className={styles.individualform} key={index+'elementholder'}>
+                          <div  key={index+'el'}>
+                          <MyTextInput disabled={formik.isSubmitting}
+                            label="Title "
+                            name={`elements[${index}][${0}].title`}
+                            type="text"
+                            placeholder="Dialogue"
+                          />
+                          <ElementParts formik={formik} index={index}/>
+                            <button
+                              type="button"
+                              className="secondary"
+                              onClick={() => arrayHelpersE.remove(index)}
+                              style={{float:"right"}}>
+                              X Remove
+                              
+                            </button>
+                          </div>
+                          </div>
+                          )}
+                            
+                          </div>
+                          </>
+                          )}
+                        </FieldArray>
+                    <p/>
                     <button disabled={formik.isSubmitting || !formik.isValid} type="submit">Submit</button>
                     
                     <div className={styles.container} style={{
                         backgroundColor: formik.values.bckColour,
-                        minWidth:"1000px",
+                        
                       }}>
                         <h1>Preview</h1>
                           <CharacterPage wikidata={formik.values}/></div>

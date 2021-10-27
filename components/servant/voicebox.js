@@ -71,13 +71,15 @@ class Voicebox extends Component{
     return(<div style={{
         display: "flex",
         backgroundColor: this.props.colour,
-        maxHeight: "100px",
+        maxHeight: "180px",
         minHeight: this.state.minHeight,
         minWidth: this.state.minWidth,
         position: "relative",
         margin: "0 10px 0 10px",
         borderBottom: "1px solid white",
-      }} className={styles.voiceLine}>{[<i key="icon" onClick={() => stateDone ? this.resetIcon() : this.pauseIcon()} 
+      }} className={styles.voiceLine}>
+      {this.props.title ? <b style={{paddingRight:"20px"}} >{ this.props.title }<br/></b> : null}
+      {[<i key="icon" onClick={() => stateDone ? this.resetIcon() : this.pauseIcon()} 
                                         className={"bi bi-"+curButton+"-circle-fill" + ' ' + styles.playIcon}/>,
                 <span key="padIcon" style={{paddingRight:"20px"}}></span>,
                 <i key="holdText" onClick={loopState ? null : () => this.stopTyping()} className={styles.voiceText}>

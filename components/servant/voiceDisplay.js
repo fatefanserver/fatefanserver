@@ -22,9 +22,10 @@ class VoiceDisplay extends Component{
         isAnim: null,
     }
     regEx = /^\s*\[m: *(\w+)\]/g;  // find pattern of [mood]line
-    allLineStrings = this.props.voiceItems.map((v) => {
+    //{Object.keys(imgdata)
+    allLineStrings = this.props.voiceItems.map((v,i) => {
             // split by pipes for separate parts to click through within line
-            return v.split('|').map((w) => {
+            return v.text.split('|').map((w) => {
                 return w;
             })
         });
@@ -97,7 +98,7 @@ class VoiceDisplay extends Component{
                 <div key="d1">{this.props.voiceItems.map((v,i) => 
                     <div key={i} onClick={() => curLine  == i ? null : this.setLine(i)}><Voicebox 
                           colour={curLine == i ? this.state.selectColour : this.state.colour} 
-                          key={i+"voice"} data={v}/></div>
+                          key={i+"voice"} data={v.text} title={v.title}/></div>
                 )}</div>
                 <div key="d2" className={styles.galleryHolderVoice}>
                     <img key="gallerybase" className={styles.galleryBase} 

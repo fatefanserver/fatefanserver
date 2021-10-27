@@ -5,10 +5,7 @@ import VoiceDisplay from './voiceDisplay';
 import ImageGallery from './imggallery';
 
 const Transposable = ({data, bgColour, sColour}) => {
-    var currentMode = "default";
     const items = [];
-    const voiceItems = [];
-    var expSheet;
     var counter = 0;
     data.forEach((i) => {
         //TODO: remove all the inserted line breaks
@@ -46,14 +43,13 @@ const Transposable = ({data, bgColour, sColour}) => {
                 items.push(<hr key={counter+'b'}/>);
                 break;
             case 'voice':
-                // TODO: MAKE BG VARIABLE INSTEAD OF BEING HARDCODED
-                if(currentMode == "voice"){
-                    voiceItems.push(i.text);
-                }
-                else{
-                    items.push(<Voicebox key={counter} colour={bgColour} data={i.text}/>);
-                    items.push(<p key={counter+'p'}/>)
-                }
+                items.push(<Voicebox key={counter} colour={bgColour} data={i.text} title={i.title}/>);
+                items.push(<p key={counter+'p'}/>)
+
+                items.push(<div key={counter+'b'}/>);
+                break;
+            case 'voiceBox':
+                items.push(<VoiceDisplay key={counter+'vb'} sColour={sColour} colour={bgColour} expSheet={i.expressionsheet} voiceItems={i.voicelines}/>);
                 items.push(<div key={counter+'b'}/>);
                 break;
             case 'gallery':
@@ -61,14 +57,10 @@ const Transposable = ({data, bgColour, sColour}) => {
                 items.push(<div key={counter+'b'}/>);
                 break;
         }
-
         counter++;
 
         
     })
-    if(currentMode == "voice"){
-        items.unshift(<VoiceDisplay key={'v'} sColour={sColour} colour={bgColour} expSheet={expSheet} voiceItems={voiceItems}/>);
-    }
     items.pop();  //removes last break
     return(
     <div className={styles.gallery}>
