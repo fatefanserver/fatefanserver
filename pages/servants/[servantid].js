@@ -14,7 +14,7 @@ const Home = ({wikidata}) => {
   return(
     <>
     <div className={styles.container} style={{
-        backgroundColor: "#faf2f4",
+        backgroundColor: wikidata.bckColour,
       }}>
       <Head>
         <title>{wikidata.truename}</title>

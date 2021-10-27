@@ -156,6 +156,7 @@ class FormSubmit extends Component{
             basicDescription: '',
             bgColour: '',
             sColour: '',
+            bckColour: '#fff6f7',
             aka: [
               ''
             ],
@@ -203,6 +204,7 @@ class FormSubmit extends Component{
                 .of(defaultSchema),
             sColour: defaultSchema,
             bgColour: defaultSchema,
+            bckColour: defaultSchema,
             basicDescription: Yup.string()
               .max(2000,'Must be 2000 characters or less'),
             image: Yup.array()
@@ -284,18 +286,25 @@ class FormSubmit extends Component{
                       <span className={styles2.tooltiptext}>{"You can use non-canon classes, but that may prevent your Servant from appearing in site searches."}</span></span>
                     <br/>
                     <MyTextInput disabled={formik.isSubmitting}
-                    style={{backgroundColor:formik.values.bgColour}}
+                    style={{backgroundColor:formik.values.bgColour, width: "100px"}}
                         label="Main Colour "
                         name="bgColour"
                         type="text"
                         placeholder="#ffffff"
                     />
                     <MyTextInput disabled={formik.isSubmitting}
-                    style={{backgroundColor:formik.values.sColour}}
+                    style={{backgroundColor:formik.values.sColour, width: "100px"}}
                         label="Accent Colour "
                         name="sColour"
                         type="text"
                         placeholder="#000000"
+                    />
+                    <MyTextInput disabled={formik.isSubmitting}
+                    style={{backgroundColor:formik.values.bckColour, width: "100px"}}
+                        label="Background Colour "
+                        name="bckColour"
+                        type="text"
+                        placeholder="#a5fffe"
                     />
                     <br/>
                     <ColourPicker/>
@@ -469,7 +478,7 @@ class FormSubmit extends Component{
                     <button disabled={formik.isSubmitting || !formik.isValid} type="submit">Submit</button>
                     
                     <div className={styles.container} style={{
-                        backgroundColor: "#faf2f4",
+                        backgroundColor: formik.values.bckColour,
                         minWidth:"1000px",
                       }}>
                         <h1>Preview</h1>
