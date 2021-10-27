@@ -26,20 +26,22 @@ class Gallery extends Component{
         const curImage = this.getImage();
         const curExp = this.getExp();
         const trynum =  Object.keys(this.props.imgdata).length - 1;
+        if(!this.props.imgdata[curImage]){
+            return(<div/>)
+        }
         return(
             <div className={styles.gallery}>
-                <button onClick={this.state.num > 0 ? this.toggleImageB : this.showWarn} disabled={this.state.num == 0 ? true : false}>&lt;</button>
-                <button onClick={this.state.num < trynum ? this.toggleImageF : this.showWarn} disabled={this.state.num == trynum ? true : false}>&gt;</button>
+                <button style={{backgroundColor: this.props.sColour}} onClick={this.state.num > 0 ? this.toggleImageB : this.showWarn} disabled={this.state.num == 0 ? true : false}>&lt;</button>
+                <button style={{backgroundColor: this.props.sColour}} onClick={this.state.num < trynum ? this.toggleImageF : this.showWarn} disabled={this.state.num == trynum ? true : false}>&gt;</button>
                 <div className={styles.galleryHolder}>
-                    <img src={curExp == '' ? this.props.imgdata[curImage].url : ''} className={styles.galleryBase}/>
-                    <img src={curExp} className={styles.galleryOverlay} style={{top: "0px", left: "0px"}}/>
+                    <img src={curExp == '' ? this.props.imgdata[curImage].url : curExp} className={styles.galleryBase}/>
                 </div>
                     <p >
                         {this.props.imgdata[curImage].description}
                     </p>
             <div className={styles.moodButton}>
-                {this.props.imgdata[curImage].expressions ? <button onClick={() => this.changeExp('')}>basic</button> : <div/>}
-                {this.props.imgdata[curImage].expressions ? Object.keys(this.props.imgdata[curImage].expressions).map((i) => <button key={i} onClick={() => this.changeExp(this.props.imgdata[curImage].expressions[i])}>{i}</button>) : <div/>}
+                {this.props.imgdata[curImage].expression ? <button style={{backgroundColor: this.props.sColour}} onClick={() => this.changeExp('')}>basic</button> : <div/>}
+                {this.props.imgdata[curImage].expression ? this.props.imgdata[curImage].expression.map((i,j) => <button style={{backgroundColor: this.props.sColour}} key={j+'expg'} onClick={() => this.changeExp(i.url)}>{i.expressionName}</button>) : <div/>}
             </div>
         </div>
         )
