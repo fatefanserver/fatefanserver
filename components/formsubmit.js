@@ -158,6 +158,13 @@ const ElementText = ({index,eindex,formik,type}) => {
       />
       </>
        )
+    case 'voiceBox':
+      formik.values.elements[index][eindex].voicelines ? null : formik.values.elements[index][eindex].voicelines = [{text:'',title:''}];
+      formik.values.elements[index][eindex].expressionsheet ? null : formik.values.elements[index][eindex].expressionsheet = [{name:'',url:''}];
+      return(
+        <>
+        </>
+      )
     default:
       return <div/>
   }
@@ -346,7 +353,7 @@ class FormSubmit extends Component{
           }}
         >
             {(formik) => (
-                <Form style={{width:"750px"}}>    
+                <Form style={{width:"1000px"}}>    
                 <button disabled={formik.isSubmitting} type="reset">Clear All</button><br/>
                     <MyTextInput disabled={formik.isSubmitting}
                         label="Access Token "
@@ -627,7 +634,7 @@ class FormSubmit extends Component{
                     
                     <div className={styles.container} style={{
                         backgroundColor: formik.values.bckColour,
-                        
+                      
                       }}>
                         <h1>Preview</h1>
                           <CharacterPage wikidata={formik.values}/></div>
