@@ -12,6 +12,13 @@ import FormSubmit from '../components/formsubmit.js';
 import TutorialButton from '../components/tutorialbutton.js';
 import ColourPicker from '../components/colorpicker.js';
 
+const addVoteDocument = async (vote) => {
+    await db.collection("users").doc("2KsCJj7dElXcpKfGCZ9B").set({
+      vote:"bbbbbbbs"
+    });
+  };
+
+
 const Home = ({wikidata}) => {
 
   return(
@@ -36,6 +43,7 @@ const Home = ({wikidata}) => {
         <hr/>
         </div><div>
         <FormSubmit wikidata={wikidata}/>
+        <button onClick={() => addVoteDocument("no")}>click</button>
         <hr style={{marginBottom:"50px"}}/>
         <Link  href="/">
         <a style={{fontSize:"50px"}}>FFS Home</a>
@@ -48,6 +56,16 @@ const Home = ({wikidata}) => {
     </>
   )
 }
+const tryRead = () => {
+    console.log('a');
+    var docRef = db.collection(`wiki`).doc('producer');
+    docRef.get().then(snapshot =>{
+        console.log('b');
+        console.log(snapshot.data());
+    })
+
+}
+
 const getWikiServantData = async () => {
   var newinfo = [];
   const data = await db.collection("wiki").where("isPublic","==",true).get()

@@ -16,7 +16,9 @@ const firebaseConfig = {
 
 // Initialize the app with a custom auth variable, limiting the server's access
 if (!firebase.apps.length) {
+  
     firebase.initializeApp(firebaseConfig);
+    firebase.firestore().settings({experimentalForceLongPolling: true});
 }
 
 export default firebase;
