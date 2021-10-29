@@ -27,7 +27,7 @@ const Transposable = ({data, bgColour, sColour}) => {
                 items.push(<h3 key={counter}>{<SpecialText data={i.name}/>} {<SpecialText data={i.rank.replace(checkdash,'–')}/>}</h3>);
                 items.push(<div key={counter+'i'} style={{display:"flex"}}>
                                <img className={styles.iconImg} src={i.icon}/>
-                               <SpecialText data={i.text}/>
+                               <div><SpecialText data={i.text}/></div>
                            </div>);
                 items.push(<hr key={counter+'b'}/>);
                 break;
@@ -54,6 +54,12 @@ const Transposable = ({data, bgColour, sColour}) => {
                 items.push(<ImageGallery key={counter} imgdata={i.img}/>);
                 items.push(<div key={counter+'b'}/>);
                 break;
+            case 'image':
+                items.push(<div style={{maxWidth:"50%",float:i.floatRight ? "right" : "inherit"}} key={counter+'img'} >
+                                <img src={i.url} style={{maxWidth:"100%",maxHeight:"50vh"}}></img>
+                                <SpecialText style={{overflow:"auto"}} data={i.description}/>
+                            </div>);
+                items.push(<div key={counter+'b'}></div>)
         }
         counter++;
 

@@ -15,6 +15,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow-wrap: break-word;
   word-wrap: normal;
   white-space: pre-line;
 }
@@ -26,8 +27,9 @@
   padding: 10px 17px 10px 17px;
   background: rgba(255, 255, 255, 1);
   width: 90%;
-  white-space:pre-line;
+  white-space:pre-wrap;
   word-wrap: normal;
+  overflow-wrap: break-word;
 }
 
 .wikiInfoLeft {
@@ -101,6 +103,7 @@
 .title,
 .description {
   word-wrap: normal;
+  overflow-wrap: break-word;
   text-align: center;
 }
 

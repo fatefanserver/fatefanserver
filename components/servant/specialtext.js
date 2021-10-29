@@ -1,5 +1,6 @@
 import styles from './servant.module.css';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const CustomRenderers = {
     p: ({children, mode}) => {
@@ -81,6 +82,6 @@ const CustomRenderersScroll = {
 }
 
 const SpecialText = ({data, mode}) => {
-    return(<ReactMarkdown components={ mode == "scroll"? CustomRenderersScroll : CustomRenderers}>{data}</ReactMarkdown>)
+    return(<ReactMarkdown remarkPlugins={[remarkGfm]} components={ mode == "scroll"? CustomRenderersScroll : CustomRenderers}>{data}</ReactMarkdown>)
 };
 export default SpecialText;

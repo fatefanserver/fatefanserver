@@ -8,8 +8,10 @@ import { Formik, Form, useField } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 import ImgInput from '../components/imginput.js';
-import ReactMarkdown from 'react-markdown';
 import FormSubmit from '../components/formsubmit.js';
+import SpecialText from '../components/servant/specialtext.js';
+import TutorialButton from '../components/tutorialbutton.js';
+import ColourPicker from '../components/colorpicker.js';
 
 const Home = ({wikidata}) => {
 
@@ -30,6 +32,9 @@ const Home = ({wikidata}) => {
           Add Servant
         </h1>
         <p>As we are currently testing, only basic class icons are available. Visual effects are basic for testing purposes.</p>
+        <TutorialButton buttonname={"Show markdown tips"}></TutorialButton>
+        <ColourPicker/>
+        <hr/>
         </div><div>
         <FormSubmit wikidata={wikidata}/>
         <hr style={{marginBottom:"50px"}}/>

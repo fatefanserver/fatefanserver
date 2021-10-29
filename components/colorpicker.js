@@ -8,7 +8,7 @@ class ColourPicker extends React.Component {
   render() {
     const isShow = this.getShow();
     return (<>
-    <button onClick={() => this.toggleShow()}>Colour picker</button>
+    <button onClick={() => this.toggleShow()}>Show colour picker</button>
     {isShow ? <ChromePicker color={"#ffffff"} /> : null}
     </>);
   }

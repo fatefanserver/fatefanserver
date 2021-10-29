@@ -7,7 +7,6 @@ import React, { Component } from 'react';
 import * as Yup from 'yup';
 import ImgInput from './imginput.js';
 import CharacterPage from './characterpage.js';
-import ColourPicker from './colorpicker.js';
 
 const possibleClasses = ['Saber','Archer','Lancer','Assassin','Caster','Berserker','Foreigner','Ruler','Avenger','Pretender','Faker','Gunner','Watcher','Gatekeeper','Moon Cancer','Alter Ego','Voyager','Rider','Shielder'];
 const exampleAttributes = ['Takeuchi','Nasu','10cm','100kg','Female','Antarctica','FGO','Late 1500s','Star','Lawful Evil']
@@ -338,11 +337,40 @@ const ElementText = ({index,eindex,formik,type}) => {
         />
         </>
       )
+    case 'image':
+      ['url','description'].forEach((ele) => {
+        formik.values.elements[index][eindex][ele] ? null : formik.values.elements[index][eindex][ele] = '';
+      })
+      formik.values.elements[index][eindex].floatRight ? null : formik.values.elements[index][eindex].floatRight = false;
+      return(
+        <>
+        <br/>
+        <MyTextInput disabled={formik.isSubmitting}
+            className={styles.heighttext}
+            style={{width:"100%"}}
+            label="URL "
+            name={`elements[${index}][${eindex}].url`}
+            type="text"
+            placeholder="https://fatefanserver.com/your_image" 
+        />
+        <br/>
+        <TextArea disabled={formik.isSubmitting}
+          style={{height:"100px",width:"100%"}}
+            className={styles.heighttext}
+            label="Description "
+            name={`elements[${index}][${eindex}].description`}
+            type="text"
+            placeholder="This is a picture of: _" 
+        />
+        <br/>
+        <MyCheckbox name={`elements[${index}][${eindex}].floatRight`} disabled={formik.isSubmitting}
+        >Keep to the right </MyCheckbox>
+        </>
+      )
     case 'skill':
       ['icon','rank','name'].forEach((ele) => {
         formik.values.elements[index][eindex][ele] ? null : formik.values.elements[index][eindex][ele] = '';
       })
-    default:
       return(<><br/>
         <MyTextInput disabled={formik.isSubmitting}
             className={styles.heighttext}
@@ -380,6 +408,8 @@ const ElementText = ({index,eindex,formik,type}) => {
             placeholder="You can use Markdown for images here!" 
         />
       </>)
+    default:
+      return(<div/>)
   }
   
 }
@@ -406,6 +436,7 @@ const ElementParts = ({index,formik}) => {
           <option value="np">NP</option>
           <option value="skill">Skill</option>
           <option value="gallery">Image Gallery</option>
+          <option value="image">Image</option>
         </MySelect>
         {<ElementText formik={formik} index={index} eindex={eindex} type={formik.values.elements[index][eindex].type}/>}
           <button
@@ -633,7 +664,6 @@ class FormSubmit extends Component{
                         placeholder="#a5fffe"
                     />
                     <br/>
-                    <ColourPicker/>
                     <p/>
                     <h3>Optional Attributes
                     <span className={styles2.tp+" bi bi-question-circle-fill"} style={{marginLeft:"10px"}}>

@@ -21,6 +21,7 @@
     "react-firebase-hooks": "^3.0.4",
     "react-markdown": "^7.0.1",
     "react-typed": "^1.2.0",
+    "remark-gfm": "^3.0.0",
     "typed.js": "^2.0.12",
     "yup": "^0.32.11"
   },
