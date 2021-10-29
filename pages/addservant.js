@@ -23,13 +23,20 @@ const Home = ({wikidata}) => {
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css"/>
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title} style={{marginBottom:"50px"}}>
+      <main >
+      <div>
+        <br/>
+        <h1 className={styles.title} style={{marginBottom:"5px"}}>
           Add Servant
         </h1>
         <p>As we are currently testing, only basic class icons are available. Visual effects are basic for testing purposes.</p>
-        <div>
+        </div><div>
         <FormSubmit wikidata={wikidata}/>
+        <hr style={{marginBottom:"50px"}}/>
+        <Link  href="/">
+        <a style={{fontSize:"50px"}}>FFS Home</a>
+      </Link>
+        
     </div>
       </main>
     </div>

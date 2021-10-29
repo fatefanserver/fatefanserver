@@ -25,13 +25,11 @@ const Transposable = ({data, bgColour, sColour}) => {
                 break;
             case 'skill':
                 items.push(<h3 key={counter}>{<SpecialText data={i.name}/>} {<SpecialText data={i.rank.replace(checkdash,'–')}/>}</h3>);
-                items.push(<div key={counter+'i'} className={styles.skillLeft}>
+                items.push(<div key={counter+'i'} style={{display:"flex"}}>
                                <img className={styles.iconImg} src={i.icon}/>
+                               <SpecialText data={i.text}/>
                            </div>);
-                items.push(<div key={counter+'d'} className={styles.skillRight}>
-                               {<SpecialText data={i.text}/>}
-                           </div>);
-                items.push(<hr key={counter+'b'} className={styles.resetSkill}/>);
+                items.push(<hr key={counter+'b'}/>);
                 break;
             case 'np':
                 items.push(<h3 key={counter}>{<SpecialText data={i.name}/>}</h3>);

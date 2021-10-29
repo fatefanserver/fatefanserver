@@ -40,7 +40,7 @@ class Gallery extends Component{
                         {this.props.imgdata[curImage].description}
                     </p>
             <div className={styles.moodButton}>
-                {this.props.imgdata[curImage].expression ? <button style={{backgroundColor: this.props.sColour}} onClick={() => this.changeExp('')}>basic</button> : <div/>}
+                {this.props.imgdata[curImage].expression ? <button style={{backgroundColor: this.props.sColour}} onClick={() => this.changeExp('')}>base</button> : <div/>}
                 {this.props.imgdata[curImage].expression ? this.props.imgdata[curImage].expression.map((i,j) => <button style={{backgroundColor: this.props.sColour}} key={j+'expg'} onClick={() => this.changeExp(i.url)}>{i.expressionName}</button>) : <div/>}
             </div>
         </div>

@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import * as Yup from 'yup';
 import ImgInput from './imginput.js';
 import CharacterPage from './characterpage.js';
-import ColourPicker from '../pages/colorpicker.js';
+import ColourPicker from './colorpicker.js';
 
 const possibleClasses = ['Saber','Archer','Lancer','Assassin','Caster','Berserker','Foreigner','Ruler','Avenger','Pretender','Faker','Gunner','Watcher','Gatekeeper','Moon Cancer','Alter Ego','Voyager','Rider','Shielder'];
 const exampleAttributes = ['Takeuchi','Nasu','10cm','100kg','Female','Antarctica','FGO','Late 1500s','Star','Lawful Evil']
@@ -70,13 +70,14 @@ const MyCheckbox = ({ children, ...props }) => {
 const MySelect = ({ label, ...props }) => {
 const [field, meta] = useField(props);
 return (
-    <div>
+    <span>
+    <br/>
     <label htmlFor={props.id || props.name}>{label}</label>
     <select {...field} {...props} />
     {meta.touched && meta.error ? (
         <span className="error" style={{color:"red"}}>{meta.error}</span>
     ) : null}
-    </div>
+    </span>
 );
 };
 
@@ -124,10 +125,107 @@ const Expressions = ({index,formik}) => {
     </FieldArray>)
 }
 
+const VoiceParts = ({index,eindex,formik,stype}) => {
+  //type = expressionsheet or voicelines
+  //`elements[${index}][${eindex}][${stype}][${vindex}]`
+  var curPush = {text: '', title: ''};
+  switch(stype){
+    case 'voicelines':
+      curPush = {text: '',title: ''};
+      break;
+    case 'expressionsheet':
+      curPush = {name: '', url: ''}
+      break;
+    case 'img':
+      curPush = {description: '', url: ''}
+      break;
+  }
+    return(
+      <FieldArray name={`elements.${index}.${eindex}.${stype}`}>
+      {arrayExpression => (
+        <>
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => {arrayExpression.push(curPush); }}
+          disabled={formik.values.elements[index].length >= 10 ? true : false}>
+          +
+        </button>
+        <hr/>
+        {formik.values.elements[index][eindex][stype].length > 0 && formik.values.elements[index][eindex][stype].map((expimg, vindex) => 
+          <div key={vindex+stype+eindex}> {
+          <div key={vindex+stype+eindex} className={styles.individualform}>
+          <br/>
+          {stype == 'voicelines' ? <>
+          <MyTextInput disabled={formik.isSubmitting}
+              className={styles.heighttext}
+              label="Title (optional) "
+              name={`elements[${index}][${eindex}][${stype}][${vindex}].title`}
+              type="text"
+              placeholder="Likes"
+          /><br/>
+            <TextArea disabled={formik.isSubmitting}
+            style={{height:"100px",width:"100%"}}
+              className={styles.heighttext}
+              label="Line "
+              name={`elements[${index}][${eindex}][${stype}][${vindex}].text`}
+              type="text"
+              placeholder="I like fighting people!" 
+          />
+          </> : stype == 'expressionsheet' ?
+          <>
+          <MyTextInput disabled={formik.isSubmitting}
+              className={styles.heighttext}
+              label="Name "
+              name={`elements[${index}][${eindex}][${stype}][${vindex}].name`}
+              type="text"
+              placeholder="smiling"
+          />
+            <MyTextInput disabled={formik.isSubmitting}
+              className={styles.heighttext}
+              label="URL "
+              name={`elements[${index}][${eindex}][${stype}][${vindex}].url`}
+              type="text"
+              placeholder="https://www.image/producer/smiling" 
+          />
+          </> : 
+          <>
+          <MyTextInput disabled={formik.isSubmitting}
+              className={styles.heighttext}
+              label="URL "
+              name={`elements[${index}][${eindex}][${stype}][${vindex}].url`}
+              type="text"
+              placeholder="https://www.fatefanserver.com/my_img"
+          />
+            <TextArea disabled={formik.isSubmitting}
+              className={styles.heighttext}
+              style={{width:"100%"}}
+              label="Description "
+              name={`elements[${index}][${eindex}][${stype}][${vindex}].description`}
+              type="text"
+              placeholder="A very interesting image." 
+          />
+          </>
+          
+          }
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => arrayExpression.remove(vindex)}
+            style={{marginRight:"30px"}}>
+            X
+          </button>
+          </div> }</div>
+        )}
+        </>
+      )}
+    </FieldArray>)
+}
+
 const ElementText = ({index,eindex,formik,type}) => {
   switch(type){
     case 'text':
-      return(
+      return(<><br/>
     <TextArea disabled={formik.isSubmitting}
       style={{height:"100px",width:"100%"}}
         className={styles.heighttext}
@@ -135,12 +233,12 @@ const ElementText = ({index,eindex,formik,type}) => {
         name={`elements[${index}][${eindex}].text`}
         type="text"
         placeholder="You can use Markdown for images here!" 
-    />
+    /></>
   )
      case 'voice':
       formik.values.elements[index][eindex].title ? null : formik.values.elements[index][eindex].title = '';
        return(
-         <>
+         <><br/>
          <MyTextInput disabled={formik.isSubmitting}
           className={styles.heighttext}
           label="Title (optional) "
@@ -151,7 +249,7 @@ const ElementText = ({index,eindex,formik,type}) => {
         <TextArea disabled={formik.isSubmitting}
         style={{height:"100px",width:"100%"}}
           className={styles.heighttext}
-          label="Text "
+          label="Line "
           name={`elements[${index}][${eindex}].text`}
           type="text"
           placeholder="I like fighting people!" 
@@ -160,13 +258,128 @@ const ElementText = ({index,eindex,formik,type}) => {
        )
     case 'voiceBox':
       formik.values.elements[index][eindex].voicelines ? null : formik.values.elements[index][eindex].voicelines = [{text:'',title:''}];
-      formik.values.elements[index][eindex].expressionsheet ? null : formik.values.elements[index][eindex].expressionsheet = [{name:'',url:''}];
+      formik.values.elements[index][eindex].expressionsheet ? null : formik.values.elements[index][eindex].expressionsheet = [{name:'base',url:''}];
       return(
         <>
+        <br/><br/>
+        <span>Voice Lines</span>
+        <VoiceParts stype="voicelines" index={index} eindex={eindex} formik={formik}/>
+        <br/><br/>
+        <span>Expression Sheet</span>
+        <VoiceParts stype="expressionsheet" index={index} eindex={eindex} formik={formik}/>
         </>
       )
+    case 'gallery':
+      formik.values.elements[index][eindex].img ? null : formik.values.elements[index][eindex].img = [{description:'',url:''}];
+      return (
+        <>
+        <br/><br/>
+        <span>Images</span>
+        <VoiceParts stype="img" index={index} eindex={eindex} formik={formik}/>
+        </>
+
+      )
+    case 'np':
+      ['classification','name','range','rank','targets'].forEach((ele) => {
+        formik.values.elements[index][eindex][ele] ? null : formik.values.elements[index][eindex][ele] = '';
+      })
+      return(
+        <>
+        <br/>
+        <MyTextInput disabled={formik.isSubmitting}
+            className={styles.heighttext}
+            style={{width:"100%"}}
+            label="Name "
+            name={`elements[${index}][${eindex}].name`}
+            type="text"
+            placeholder="[Imaginary Record]{#fg Absolute Stage of Fabricated Conception}" 
+        />
+        <br/>
+        <MyTextInput disabled={formik.isSubmitting}
+            className={styles.heighttext}
+            style={{width:"50px"}}
+            label="Range "
+            name={`elements[${index}][${eindex}].range`}
+            type="text"
+            placeholder="50" 
+        />
+        <MyTextInput disabled={formik.isSubmitting}
+            className={styles.heighttext}
+            style={{width:"50px"}}
+            label="NP Description "
+            name={`elements[${index}][${eindex}].classification`}
+            type="text"
+            placeholder="Anti-Unit" 
+        />
+        <MyTextInput disabled={formik.isSubmitting}
+            className={styles.heighttext}
+            style={{width:"50px"}}
+            label="Rank "
+            name={`elements[${index}][${eindex}].rank`}
+            type="text"
+            placeholder="A+" 
+        />
+        <MyTextInput disabled={formik.isSubmitting}
+            className={styles.heighttext}
+            style={{width:"50px"}}
+            label="Max. Targets "
+            name={`elements[${index}][${eindex}].targets`}
+            type="text"
+            placeholder="10" 
+        />
+        <br/>
+        <TextArea disabled={formik.isSubmitting}
+          style={{height:"100px",width:"100%"}}
+            className={styles.heighttext}
+            label="NP Description "
+            name={`elements[${index}][${eindex}].text`}
+            type="text"
+            placeholder="You can use Markdown for images here!" 
+        />
+        </>
+      )
+    case 'skill':
+      ['icon','rank','name'].forEach((ele) => {
+        formik.values.elements[index][eindex][ele] ? null : formik.values.elements[index][eindex][ele] = '';
+      })
     default:
-      return <div/>
+      return(<><br/>
+        <MyTextInput disabled={formik.isSubmitting}
+            className={styles.heighttext}
+            style={{width:"100%"}}
+            label="Icon (URL) "
+            name={`elements[${index}][${eindex}].icon`}
+            type="text"
+            placeholder="https://fatefanserver.com/icon" 
+        />
+        <br/>
+        <MyTextInput disabled={formik.isSubmitting}
+            className={styles.heighttext}
+            style={{width:"100%"}}
+            label="Name "
+            name={`elements[${index}][${eindex}].name`}
+            type="text"
+            placeholder="Charisma" 
+        />
+        <br/>
+        <MyTextInput disabled={formik.isSubmitting}
+            className={styles.heighttext}
+            style={{width:"50px"}}
+            label="Rank "
+            name={`elements[${index}][${eindex}].rank`}
+            type="text"
+            placeholder="C" 
+        />
+        <br/>
+        <TextArea disabled={formik.isSubmitting}
+          style={{height:"100px",width:"100%"}}
+            className={styles.heighttext}
+            label="Skill Description "
+            name={`elements[${index}][${eindex}].text`}
+            type="text"
+            placeholder="You can use Markdown for images here!" 
+        />
+      </>)
   }
   
 }
@@ -177,8 +390,7 @@ const ElementParts = ({index,formik}) => {
       <FieldArray name={`elements.${index}`}>
       {arrayExpression => (
         <>
-        <br/>
-        
+        <hr/>
         {formik.values.elements[index].length > 0 && formik.values.elements[index].map((expimg, eindex) => 
           <div key={expimg+'ee'+eindex}> {formik.values.elements[index][eindex].type != 'setting' ?
           <div key={index+'e'+eindex} className={styles.individualform}>
@@ -244,6 +456,7 @@ class FormSubmit extends Component{
     isPreview: false,
     submitValues: {},
     hasEl: false,
+    curSection: ['text']
   }
   
     render(){
@@ -261,9 +474,9 @@ class FormSubmit extends Component{
             artist:'',writer:'',aka:'',height:'',weight:'',gender:'',region:'',source:'',timeperiod:'',alignment:'',attribute:'',
             stats: {AGI: '', END: '', LUK: '', MP:'',NP:'',STR:''},
             basicDescription: '',
-            bgColour: '#aaf6f7',
-            sColour: '#faf6ff',
-            bckColour: '#fff6f7',
+            bgColour: '#91a1a1',
+            sColour: '#cadada',
+            bckColour: '#f5f5f5',
             aka: [
               ''
             ],
@@ -277,7 +490,7 @@ class FormSubmit extends Component{
             ],
             elements: [
               [{type:'setting',
-              title:''}]
+              title:'My First Section'}]
               ],
           }}
           validationSchema={Yup.object({
@@ -353,7 +566,8 @@ class FormSubmit extends Component{
           }}
         >
             {(formik) => (
-                <Form style={{width:"1000px"}}>    
+                <Form style={{display:"flex"}}>    
+                <div style={{width:"45vw", height:"85vh",overflow:"auto"}}>
                 <button disabled={formik.isSubmitting} type="reset">Clear All</button><br/>
                     <MyTextInput disabled={formik.isSubmitting}
                         label="Access Token "
@@ -595,23 +809,27 @@ class FormSubmit extends Component{
                           <b>Sections </b>
                           <span className={styles2.tp+" bi bi-question-circle-fill"} style={{marginLeft:"10px",marginRight:'20px'}}>
                           <span className={styles2.tooltiptext}>{"You can put anything you want here. For example, character details, image galleries..."}</span></span>
+                          <br/>
                           <button
                             type="button"
                             className="secondary"
                             onClick={() => {arrayHelpersE.push([{type:'setting',title:''}])}}
                             disabled={formik.values.elements.length >= 15 ? true : false}>
-                            +
+                            + Section
                           </button>
                           <div >
+                          
                           {formik.values.elements.length > 0 && formik.values.elements.map((e, index) => 
                           <div className={styles.individualform} key={index+'elementholder'}>
                           <div  key={index+'el'}>
+                          
                           <MyTextInput disabled={formik.isSubmitting}
                             label="Title "
                             name={`elements[${index}][${0}].title`}
                             type="text"
                             placeholder="Dialogue"
                           />
+                          
                           <ElementParts formik={formik} index={index}/>
                             <button
                               type="button"
@@ -631,13 +849,17 @@ class FormSubmit extends Component{
                         </FieldArray>
                     <p/>
                     <button disabled={formik.isSubmitting || !formik.isValid} type="submit">Submit</button>
-                    
+                    </div>
+                     <div style={{width:"50vw",fontSize:"10px",height:"85vh",overflow:"auto"}}>
                     <div className={styles.container} style={{
                         backgroundColor: formik.values.bckColour,
                       
                       }}>
+
+                     
                         <h1>Preview</h1>
                           <CharacterPage wikidata={formik.values}/></div>
+                          </div>
                                 </Form>
                             
                             )}

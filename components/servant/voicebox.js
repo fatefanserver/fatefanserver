@@ -27,6 +27,16 @@ class Voicebox extends Component{
         this.typed = new Typed(this.el, options);
         this.typed.destroy();
     }
+    resetTyped() {
+        this.typed.destroy();
+        const options = {
+            strings: [ReactDOMServer.renderToString(<SpecialText data={this.props.data} mode={"scroll"}/>)]
+            ,typeSpeed: 8,
+            showCursor: false,
+            onComplete: () => this.onDone(),
+        }
+        this.typed = new Typed(this.el, options);
+    }
     componentWillUnmount() {
         this.typed.destroy();
     }
@@ -43,12 +53,14 @@ class Voicebox extends Component{
     }
     resetIcon = () => {
         if(this.state.firstLoop){
+            this.resetTyped();
             var curval = this.el.parentElement.parentElement.getBoundingClientRect();
             this.setState(state => ({ firstLoop: false, isDone: false, minHeight: curval.height, minWidth: curval.width}));
             this.typed.reset();
             this.toggleIcon();
         }
         else{
+            this.resetTyped();
             this.setState(state => ({ isDone: false}));
             this.typed.reset();
             this.toggleIcon();
@@ -68,6 +80,7 @@ class Voicebox extends Component{
     const curButton = this.getButton();
     const stateDone = this.getDone();
     const loopState = this.getLoop();
+    //this.resetTyped();
     return(<div style={{
         display: "flex",
         backgroundColor: this.props.colour,
@@ -78,7 +91,7 @@ class Voicebox extends Component{
         margin: "0 10px 0 10px",
         borderBottom: "1px solid white",
       }} className={styles.voiceLine}>
-      {this.props.title ? <b style={{paddingRight:"20px"}} >{ this.props.title }<br/></b> : null}
+      {this.props.title ? <b style={{paddingRight:"20px", width:"50px"}} >{ this.props.title }<br/></b> : null}
       {[<i key="icon" onClick={() => stateDone ? this.resetIcon() : this.pauseIcon()} 
                                         className={"bi bi-"+curButton+"-circle-fill" + ' ' + styles.playIcon}/>,
                 <span key="padIcon" style={{paddingRight:"20px"}}></span>,
