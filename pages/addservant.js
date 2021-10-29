@@ -9,7 +9,6 @@ import React from 'react';
 import * as Yup from 'yup';
 import ImgInput from '../components/imginput.js';
 import FormSubmit from '../components/formsubmit.js';
-import SpecialText from '../components/servant/specialtext.js';
 import TutorialButton from '../components/tutorialbutton.js';
 import ColourPicker from '../components/colorpicker.js';
 

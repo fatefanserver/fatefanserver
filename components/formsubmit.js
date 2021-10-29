@@ -1,5 +1,5 @@
 import firebase from '../firebase/clientApp.js'
-//const db = firebase.firestore();
+const db = firebase.firestore();
 import styles from '../styles/Home.module.css'
 import styles2 from './servant/servant.module.css'
 import { Formik, Form, useField, FieldArray } from 'formik';
@@ -482,6 +482,14 @@ function randomColor(){
 }
 const randomColours = [randomColor(),randomColor(),randomColor()];*/
 
+const getWikiServantData = async () => {
+  var newinfo = {};
+  var docRef = db.collection(`wiki`).doc('producer');
+  const data = await docRef.get();
+  newinfo = data.data();
+  return newinfo;   
+}
+
 class FormSubmit extends Component{
   state = {
     isPreview: false,
@@ -568,8 +576,7 @@ class FormSubmit extends Component{
                 description: Yup.string()
                   .max(512,'Must be 512 characters or less'),
                 url: Yup.string()
-                  .url('Must be a valid URL')
-                  .required('Required'),
+                  .url('Must be a valid URL'),
                 name: Yup.string()
                   .max(64,'Must be 64 characters or less')
                   .min(2,'Must be 2 characters or more')
@@ -581,19 +588,68 @@ class FormSubmit extends Component{
                     .max(20,'Cannot be longer than 20 characters')
                     .min(1,'Must be 1 character or more'),
                    url: Yup.string()
-                   .url('Must be a valid URL')
+                   .url('Must be a valid URL'),
+                   
                   }))
               })),
             url: Yup.string()
               .url('Must be a valid URL'),
-            
+            elements: Yup.array()
+              .of(Yup.array()
+                .of(Yup.object({
+                  type: Yup.string()
+                    .oneOf(['setting','text','gallery','image','voice','voiceBox','np','skill']),
+                  title: defaultSchema,
+                  text: Yup.string()
+                    .max(4000,'Cannot be longer than 4000 characters (just add another text section if you want)'),
+                    description: Yup.string()
+                    .max(2000,'Cannot be longer than 2000 characters'),
+                  url: Yup.string()
+                   .url('Must be a valid URL'),
+                   icon: Yup.string()
+                   .url('Must be a valid URL'),
+                   img: Yup.array()
+                    .of(Yup.object({
+                      description: Yup.string()
+                        .max(2000,'Cannot be longer than 2000 characters'),
+                        url: Yup.string()
+                  .url('Must be a valid URL')
+                    })),
+                    expressionsheet: Yup.array()
+                    .of(Yup.object({
+                      name: Yup.string()
+                        .matches(/^[a-zA-Z-_0-9]+$/,{excludeEmptyString:true,message:'You can only use letters, numbers, dashes, and underscores.'})
+                        .max(64,'Cannot be longer than 2000 characters'),
+                      url: Yup.string()
+                  .url('Must be a valid URL')
+                    })),
+                    voicelines: Yup.array()
+                    .of(Yup.object({
+                      text: Yup.string()
+                        .max(2000,'Cannot be longer than 2000 characters'),
+                        title: defaultSchema
+                    })),
+                  rank: defaultSchema,range: defaultSchema,targets: defaultSchema,classification: defaultSchema,
+                  name: Yup.string().max(256,'Cannot be longer than 256 characters'),
+                })
+                )),
             
           })}
           onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-            }, 400);
+          
+          let documentRef = db.collection(`wiki`).doc('producer');
+          let valCopy = JSON.parse(JSON.stringify(values));
+          documentRef.get().then(docuSnapshot => {
+            alert(String(docuSnapshot.val()) );
+          })
+          valCopy.elements = [];
+          /*documentRef.set(valCopy).then((res) => {
+            alert('Added');
+            setSubmitting(false);
+          }).catch((err) => {
+            alert(`Failed to submit. Someone may have taken that name while you were submitting. Try taking a new name.`);
+            setSubmitting(false);
+          });//*/
           }}
         >
             {(formik) => (
