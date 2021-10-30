@@ -1,4 +1,4 @@
-import firebase from '../firebase/clientApp.js'
+import firebase from '../firebase/clientApp.ts'
 const db = firebase.firestore();
 import Head from 'next/head'
 import Image from 'next/image'
@@ -11,12 +11,12 @@ import ImgInput from '../components/imginput.js';
 import FormSubmit from '../components/formsubmit.js';
 import TutorialButton from '../components/tutorialbutton.js';
 import ColourPicker from '../components/colorpicker.js';
-
+/*
 const addVoteDocument = async (vote) => {
-    await db.collection("users").doc("2KsCJj7dElXcpKfGCZ9B").set({
-      vote:"bbbbbbbs"
-    });
-  };
+  await db.collection("votes").doc("aaaaa").set({a:'bbbbbbb'}).then(console.log('done1'));
+  console.log('done');
+  //<button onClick={() => addVoteDocument("no")}>click</button>
+};*/
 
 
 const Home = ({wikidata}) => {
@@ -43,7 +43,7 @@ const Home = ({wikidata}) => {
         <hr/>
         </div><div>
         <FormSubmit wikidata={wikidata}/>
-        <button onClick={() => addVoteDocument("no")}>click</button>
+        
         <hr style={{marginBottom:"50px"}}/>
         <Link  href="/">
         <a style={{fontSize:"50px"}}>FFS Home</a>
@@ -56,19 +56,10 @@ const Home = ({wikidata}) => {
     </>
   )
 }
-const tryRead = () => {
-    console.log('a');
-    var docRef = db.collection(`wiki`).doc('producer');
-    docRef.get().then(snapshot =>{
-        console.log('b');
-        console.log(snapshot.data());
-    })
-
-}
 
 const getWikiServantData = async () => {
   var newinfo = [];
-  const data = await db.collection("wiki").where("isPublic","==",true).get()
+  const data = await db.collection("wiki").get()
   data.forEach((i) =>{
     newinfo.push(i.data().name);
   });

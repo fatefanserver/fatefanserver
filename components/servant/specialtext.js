@@ -49,7 +49,8 @@ const CustomRenderersScroll = {
         const regexFg = /\[([\S ][^\]]+)\]\{#(\w+) ([\S ][^\}]+)\}/g;
         for(var i = 0; i < children.length; i++){
             if(typeof(children[i]) === 'string'){
-                children[i] =children[i].replace(regexMood,'');
+                //children[i] =children[i].replace(regexMood,'');
+                
                 if(checkregexTags.test(children[i])){
                     const furigana = [...children[i].matchAll(regexFg)];
                     children[i] = children[i].split(/\[([\S ][^\]]+)\]\{#\w+ [\S ][^\}]+\}/g).map((v,i) => {
@@ -82,6 +83,7 @@ const CustomRenderersScroll = {
 }
 
 const SpecialText = ({data, mode}) => {
-    return(<ReactMarkdown remarkPlugins={[remarkGfm]} components={ mode == "scroll"? CustomRenderersScroll : CustomRenderers}>{data}</ReactMarkdown>)
+    var newData = data.replace(/\n/gi, '&nbsp;\n');
+    return(<ReactMarkdown remarkPlugins={[remarkGfm]} components={ mode == "scroll"? CustomRenderersScroll : CustomRenderers}>{newData}</ReactMarkdown>)
 };
 export default SpecialText;

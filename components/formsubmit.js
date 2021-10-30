@@ -1,4 +1,4 @@
-import firebase from '../firebase/clientApp.js'
+import firebase from '../firebase/clientApp.ts'
 const db = firebase.firestore();
 import styles from '../styles/Home.module.css'
 import styles2 from './servant/servant.module.css'
@@ -22,7 +22,7 @@ const MyTextInput = ({ label, ...props }) => {
       <>
         <label htmlFor={props.id || props.name}>{label}</label>
         <input className="text-input" {...field} {...props} />
-        {meta.touched && meta.error ? (
+        {meta.error ? (
           <span className="error" style={{color:"red"}}>{meta.error}</span>
         ) : null}
       </>
@@ -34,18 +34,12 @@ const TextArea = ({label, ...props}) => {
     <>
        <label htmlFor={props.id || props.name}>{label}</label>
        <textarea className="text-input" {...field} {...props} />
-        {meta.touched && meta.error ? (
+        {meta.error ? (
           <span className="error" style={{color:"red"}}>{meta.error}</span>
         ) : null}
     </>
   )
 }
-const MyImgInput = ({ label, id,...props }) => {
-const [field, meta] = useField(props);
-return (
-    <ImgInput label={label} id={id} newprops={{...props}} field={field} meta={meta}/>
-);
-};
   
 const MyCheckbox = ({ children, ...props }) => {
 // React treats radios and checkbox inputs differently other input types, select, and textarea.
@@ -59,7 +53,7 @@ const MyCheckbox = ({ children, ...props }) => {
                 <input type="checkbox" {...field} {...props} />
                 {children}
             </label>
-            {meta.touched && meta.error ? (
+            {meta.error ? (
                 <span className="error" style={{color:"red"}}>{meta.error}</span>
             ) : null}
         </div>
@@ -73,7 +67,7 @@ return (
     <br/>
     <label htmlFor={props.id || props.name}>{label}</label>
     <select {...field} {...props} />
-    {meta.touched && meta.error ? (
+    {meta.error ? (
         <span className="error" style={{color:"red"}}>{meta.error}</span>
     ) : null}
     </span>
@@ -219,6 +213,16 @@ const VoiceParts = ({index,eindex,formik,stype}) => {
         </>
       )}
     </FieldArray>)
+}
+function generate_token(length){
+  //edit the token allowed characters
+  var a = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split("");
+  var b = [];  
+  for (var i=0; i<length; i++) {
+      var j = (Math.random() * (a.length-1)).toFixed(0);
+      b[i] = a[j];
+  }
+  return b.join("");
 }
 
 const ElementText = ({index,eindex,formik,type}) => {
@@ -493,55 +497,71 @@ const getWikiServantData = async () => {
 class FormSubmit extends Component{
   state = {
     isPreview: false,
-    submitValues: {},
-    hasEl: false,
-    curSection: ['text']
+    Vals: this.props.isEdit ? this.props.wikidata : {bckColour:'#fff'},
+    curSection: ['text'],
+    initValues: {
+      accessToken: '',
+      acceptedTerms: true, 
+      name: '',
+      truename: '',
+      class: '',
+      artist:'',writer:'',aka:'',height:'',weight:'',gender:'',region:'',source:'',timeperiod:'',alignment:'',attribute:'',
+      stats: {AGI: '', END: '', LUK: '', MP:'',NP:'',STR:''},
+      basicDescription: '',
+      bgColour: '#91a1a1',
+      sColour: '#cadada',
+      bckColour: '#f5f5f5',
+      aka: [
+        ''
+      ],
+      image: [
+        {description: '',
+         url: '',
+         name:'',
+         expression: [
+           
+         ]}
+      ],
+      elements: [
+        [{type:'setting',
+        title:'My First Section'}]
+        ],
+    },
+
+  }
+  updateVals = (values) => {
+    this.setState({Vals: values});
   }
   
     render(){
-      const defaultSchema = Yup.string().max(64,'Must be 64 characters or less');
+      const defaultSchema = Yup.string().max(128,'Must be 64 characters or less');
+      var nameSchema = Yup.string();
+      if(this.props.isEdit){
+        var initValuesE = this.props.wikidata;
+        initValuesE['accessToken'] = '';
+      }
+
+      
+      if(this.props.isEdit){
+        // so user can edit
+        nameSchema = Yup.string();
+      }else{
+        nameSchema=Yup.string().notOneOf([this.props.wikidata],
+          'That name is taken.'
+        ).matches(/^[a-zA-Z-_0-9]+$/,{excludeEmptyString:true,message:'You can only use letters, numbers, dashes, and underscores.'})
+        .required('Required')
+        .max(50, 'Must be 50 characters or less')
+        .min(2, 'Must be 2 characters or more');
+      }
       
         return(
-          <>
+          <div style={{display:"flex"}}>
             <Formik
-          initialValues={{
-            accessToken: '',
-            acceptedTerms: true, 
-            name: '',
-            truename: '',
-            class: '',
-            artist:'',writer:'',aka:'',height:'',weight:'',gender:'',region:'',source:'',timeperiod:'',alignment:'',attribute:'',
-            stats: {AGI: '', END: '', LUK: '', MP:'',NP:'',STR:''},
-            basicDescription: '',
-            bgColour: '#91a1a1',
-            sColour: '#cadada',
-            bckColour: '#f5f5f5',
-            aka: [
-              ''
-            ],
-            image: [
-              {description: '',
-               url: '',
-               name:'',
-               expression: [
-                 
-               ]}
-            ],
-            elements: [
-              [{type:'setting',
-              title:'My First Section'}]
-              ],
-          }}
+          initialValues={this.props.isEdit ? initValuesE : this.state.initValues}
           validationSchema={Yup.object({
+            accessToken: Yup.string().max(128,'C'),
             acceptedTerms: Yup.boolean(),
-            name: Yup.string()
-              .notOneOf([this.props.wikidata],
-                'That name is taken.'
-              )
-              .matches(/^[a-zA-Z-_0-9]+$/,{excludeEmptyString:true,message:'You can only use letters, numbers, dashes, and underscores.'})
-              .required('Required')
-              .max(50, 'Must be 50 characters or less')
-              .min(2, 'Must be 2 characters or more'),
+            name: nameSchema,
             truename: Yup.string()
               .max(50,'Must be 50 characters or less')
               .required('Required'),
@@ -579,8 +599,7 @@ class FormSubmit extends Component{
                   .url('Must be a valid URL'),
                 name: Yup.string()
                   .max(64,'Must be 64 characters or less')
-                  .min(2,'Must be 2 characters or more')
-                  .required('Required'),
+                  .min(2,'Must be 2 characters or more'),
                 expression: Yup.array()
                   .of(Yup.object({
                     expressionName: Yup.string()
@@ -619,7 +638,7 @@ class FormSubmit extends Component{
                     .of(Yup.object({
                       name: Yup.string()
                         .matches(/^[a-zA-Z-_0-9]+$/,{excludeEmptyString:true,message:'You can only use letters, numbers, dashes, and underscores.'})
-                        .max(64,'Cannot be longer than 2000 characters'),
+                        .max(64,'Cannot be longer than 64 characters'),
                       url: Yup.string()
                   .url('Must be a valid URL')
                     })),
@@ -636,29 +655,155 @@ class FormSubmit extends Component{
             
           })}
           onSubmit={(values, { setSubmitting }) => {
-          
-          let documentRef = db.collection(`wiki`).doc('producer');
-          let valCopy = JSON.parse(JSON.stringify(values));
-          documentRef.get().then(docuSnapshot => {
-            alert(String(docuSnapshot.val()) );
-          })
-          valCopy.elements = [];
-          /*documentRef.set(valCopy).then((res) => {
-            alert('Added');
-            setSubmitting(false);
+          var testToken = 'test';
+          if(values.accessToken != ''){
+            testToken = values.accessToken;
+          }
+          var userDoc = db.collection("users").doc(testToken);
+          //do this after checking if editing or not, dont need if edit
+          if(!this.props.isEdit){
+            var curName = values.name;
+            //if it is doing a new submission
+            const newPrivToken = 'p_-_' + generate_token(32) + curName;
+            //store current name
+            userDoc.get().then((tokensnapshot) => {
+            if(tokensnapshot.exists){
+              let userData = tokensnapshot.data();
+              var newServants = [];
+              if(userData.servants){
+                newServants = userData.servants;
+              }
+              newServants.push(values.name);
+              let documentRef = db.collection("wiki").doc(values.name);
+              let valCopy = JSON.parse(JSON.stringify(values));
+              let valCopyElements = valCopy.elements;
+              valCopy.elements = [];
+              //give it a private token for private pages
+              valCopy.privToken = newPrivToken;
+              if(!valCopy.acceptedTerms){
+                curName = newPrivToken;
+              }
+
+              db.runTransaction((transaction) => {
+                          return transaction.get(documentRef).then((servantDoc) => {
+                            if(servantDoc.exists){
+                              alert('Failed to submit. Someone may have taken the name while you were submitting, or your connection is poor. Try a new name.');
+                              setSubmitting(false);
+                            }
+                            else{
+                              const realtimedb = firebase.database();
+                              realtimedb.ref(`wiki/${values.name}/elements`).set(valCopyElements).then(
+                                documentRef.set(valCopy).then((res) => {
+                                  userDoc.set({servants:newServants},{merge:'true'}).then((res) => {
+                                    window.open(`/servants/${curName}`,"_self");
+                                    setSubmitting(false);
+                                  }).catch((err) => {
+                                    alert( 'Failed to submit. You may have a poor internet connection.');
+                                    setSubmitting(false);
+                                  })
+                                  
+                                }).catch((err) => {
+                                  alert(`Failed to submit. Someone may have taken that name while you were submitting, or your internet connection may be poor.`);
+                                  setSubmitting(false);
+                                })
+                              ).catch((err) => {
+                                alert('Failed to submit.');
+                                setSubmitting(false);
+                              });
+                            }
+                          }).catch((err) => {
+                            alert('Failed to submit.');
+                          setSubmitting(false);
+                          })
+                        })
+            }
+            else{
+              alert('Invalid access code.');
+              setSubmitting(false);
+            }
           }).catch((err) => {
-            alert(`Failed to submit. Someone may have taken that name while you were submitting. Try taking a new name.`);
+            alert('Invalid access code.');
             setSubmitting(false);
-          });//*/
+          })
+          }
+          else{
+            //if user is editing
+            var curName = values.name;
+            if(!values.acceptedTerms){
+              curName = values.privToken;
+            }
+            //store current name
+            userDoc.get().then((tokensnapshot) => {
+            if(tokensnapshot.exists){
+              let userData = tokensnapshot.data();
+              if(userData.servants.includes(values.name)){
+                 db.runTransaction((transaction) => {
+                          return transaction.get(documentRef).then((servantDoc) => {
+                            if(!servantDoc.exists){
+                              alert('Something went wrong.');
+                              setSubmitting(false);
+                            }
+                            else{
+                              const realtimedb = firebase.database();
+                              realtimedb.ref(`wiki/${values.name}/elements`).set(valCopyElements).then(
+                                documentRef.set(valCopy).then((res) => {
+                                    window.open(`/servants/${curName}`,"_self");
+                                    setSubmitting(false);
+                                  
+                                }).catch((err) => {
+                                  alert(`Failed to edit. Someone may have taken that name while you were submitting, or your internet connection may be poor.`);
+                                  setSubmitting(false);
+                                })
+                              ).catch((err) => {
+                                alert('Failed to edit.');
+                                setSubmitting(false);
+                              });
+                            }
+                          }).catch((err) => {
+                            alert('Failed to edit.');
+                          setSubmitting(false);
+                          })
+                        })
+              }
+              else{
+                alert('Cannot edit this.');
+                setSubmitting(false);
+                return;
+              }
+              let documentRef = db.collection("wiki").doc(values.name);
+              let valCopy = JSON.parse(JSON.stringify(values));
+              let valCopyElements = valCopy.elements;
+              // remove elements for database
+              valCopy.elements = [];
+
+             
+            }
+            else{
+              alert('Invalid access code.');
+              setSubmitting(false);
+            }
+          }).catch((err) => {
+            alert('Invalid access code.');
+            setSubmitting(false);
+          })
+          }
+          
+
           }}
         >
             {(formik) => (
-                <Form style={{display:"flex"}}>    
-                <div style={{width:"45vw", height:"85vh",overflow:"auto"}}>
-                <button disabled={formik.isSubmitting} type="reset">Clear All</button><br/>
+                <Form >    
+                <div style={{width:"45vw"}}>
+                {this.props.isEdit ? <button disabled={formik.isSubmitting} type="reset">Revert All Changes</button>
+                : <button disabled={formik.isSubmitting} type="reset">Clear All</button>}
+                <hr/>
+                <button disabled={formik.isSubmitting || !formik.isValid} 
+                            type="button"
+                            onClick={() => this.updateVals(formik.values)}>Update Preview</button>
+                <br/>
                     <MyTextInput disabled={formik.isSubmitting}
                         label="Access Token "
-                        name="accesstoken"
+                        name="accessToken"
                         type="text"
                         placeholder="paste here"
                     />                
@@ -671,8 +816,8 @@ class FormSubmit extends Component{
                     <br/>
                     </MyCheckbox>
                     <p/>
-                    <MyTextInput disabled={formik.isSubmitting}
-                        label="Name "
+                    <MyTextInput disabled={formik.isSubmitting || this.props.isEdit}
+                        label="Name (URL only) "
                         name="name"
                         type="text"
                         placeholder="producer"
@@ -934,24 +1079,25 @@ class FormSubmit extends Component{
                           )}
                         </FieldArray>
                     <p/>
+                    
                     <button disabled={formik.isSubmitting || !formik.isValid} type="submit">Submit</button>
+                    <button disabled={formik.isSubmitting || !formik.isValid} 
+                            type="button"
+                            onClick={() => this.updateVals(formik.values)}>Update Preview</button>
                     </div>
-                     <div style={{width:"50vw",fontSize:"10px",height:"85vh",overflow:"auto"}}>
-                    <div className={styles.container} style={{
-                        backgroundColor: formik.values.bckColour,
-                      
-                      }}>
-
                      
-                        <h1>Preview</h1>
-                          <CharacterPage wikidata={formik.values}/></div>
-                          </div>
                                 </Form>
                             
                             )}
         </Formik>
-        
-        </>
+        <div style={{width:"50vw",fontSize:"10px"}}>
+            <div className={styles.container} style={{
+                backgroundColor: this.state.Vals.bckColour,                
+              }}>
+                <h1>Preview</h1>
+                  <CharacterPage wikidata={this.state.Vals}/></div>
+                  </div>
+        </div>
         )
     }
 }

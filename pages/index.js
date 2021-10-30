@@ -42,8 +42,10 @@ const Home = ({wikidata}) => {
         }
         </style>
         <p className={styles.description}>
-          News and wiki
+          Welcome to the FFS wiki! <br/> Please be patient as we undergo the beta test. <br/>
+          Check out the <Link href="/servants/producer">Producer</Link>, or <Link href="/servants/naomasa">Ii Naomasa</Link> profiles for a demo!
         </p>
+
         <table>
         {rows}
         </table>
