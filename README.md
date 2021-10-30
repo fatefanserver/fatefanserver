@@ -1,4 +1,4 @@
-[Fate/Fanservant Wiki](https://fatefanserver.vercel.app/)
+[Fate/Fanservant Wiki](https://ffs-wiki.vercel.app)
 
 This is a fan-made project by the fatefanserver group.
 
